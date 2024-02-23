@@ -1,0 +1,21 @@
+{
+  "name": "accent_capital",
+  "version": "1.0.0",
+  "description": "accent_capital",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+      "build": "esbuild index.js --bundle --outfile=dist/index.js --watch",
+      "build_by_file": "node builder.mjs",
+      "server": "serve"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "0.20.1",
+    "serve": "^14.2.1"
+  },
+  "dependencies": {
+    "motion": "^10.17.0"
+  }
+}

@@ -1,13 +1,61 @@
 import { animate, inView, stagger } from "motion";
+import SplitType from 'split-type';
+
 
 if (window.innerWidth > 991) {
+
+    const achievementBLock = document.querySelectorAll('.achievement-tile');
+
+    achievementBLock.forEach((block, index) => {
+        block.style.opacity = 0;
+    });
+
     inView(".div-block-9", (_) => {
-        animate( ".achievement-tile", { opacity: [0, 1] , y: [40, 0] }, { delay: stagger(0.3), duration: 1});
+        animate( ".achievement-tile", { opacity: [ 1] , y: [40, 0] }, { delay: stagger(0.3), duration: 1});
     });
 
 
-    inView(".title-about-company", (_) => {
-        animate( ".title-about-company", { opacity: [0, 1] , y: [40, 0] }, { delay: 0.3, duration: 1});
+    const blocks = document.querySelectorAll('.text-block-4');
+
+    // Итерируем через каждый блок
+    blocks.forEach((block) => {
+        // Применяем функцию inView к каждому блоку отдельно
+        inView(block, (_) => {
+            // Инициализируем SplitType для текущего блока
+            const text = new SplitType(block);
+            text.lines.forEach((line, index) => {
+                // Анимируем каждую линию с учетом индивидуальной задержки и продолжительности
+                animate(line, { opacity: [0, 1], y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.4 });
+            });
+        });
+    });
+
+    inView(".main-block", (_) => {
+        const text = new SplitType('.main-title-animation');
+        text.lines.forEach((line, index) => {
+            animate( line, { opacity: [0, 1] , y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.8});
+        });
+    });
+
+    inView(".about-company-block", (_) => {
+        const text = new SplitType('.title-about-company');
+        text.lines.forEach((line, index) => {
+            animate( line, { opacity: [0, 1] , y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.8});
+        });
+    });
+
+    inView(".team-block", (_) => {
+        const text = new SplitType('.team-block-title');
+        text.lines.forEach((line, index) => {
+            animate( line, { opacity: [0, 1] , y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.8});
+        });
+    });
+
+    inView(".contact-block", (_) => {
+        const text = new SplitType('.contact-title');
+        text.lines.forEach((line, index) => {
+            animate( line, { opacity: [0, 1] , y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.8});
+        });
     });
 
 

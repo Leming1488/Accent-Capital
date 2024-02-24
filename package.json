@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-      "build": "esbuild index.js --bundle --outfile=dist/index.js --watch",
-      "build_by_file": "node builder.mjs",
-      "server": "serve"
+    "build": "esbuild index.js --bundle --outfile=dist/index.js --watch",
+    "build_by_file": "node builder.mjs",
+    "server": "serve"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "serve": "^14.2.1"
   },
   "dependencies": {
-    "motion": "^10.17.0"
+    "motion": "^10.17.0",
+    "split-type": "^0.3.4"
   }
 }

@@ -2,60 +2,58 @@ import { animate, inView, stagger } from "motion";
 import SplitType from 'split-type';
 
 
+const animateText = (selector, delay = 0.1, duration = 0.6) => {
+    const text = new SplitType(selector);
+    text.lines.forEach((line) => {
+        line.style.overflow = "hidden";
+    });
+    text.words.forEach((word) => {
+        word.style.transform = "translateY(100%)";
+    });
+    text.words.forEach((word, index) => {
+        animate( word, { opacity: [0, 1] , translateY: ["100%", "0%"] }, { delay: delay + index * delay, ease: [.25, 1, .5 ,1], duration}).finished.then(() => {
+            const parentLine = word.closest('.line');
+            if (parentLine) {
+                parentLine.style.overflow = "initial";
+            }
+        });
+    });
+};
+
+
 if (window.innerWidth > 991) {
 
     const achievementBLock = document.querySelectorAll('.achievement-tile');
-
     achievementBLock.forEach((block, index) => {
         block.style.opacity = 0;
     });
-
     inView(".div-block-9", (_) => {
         animate( ".achievement-tile", { opacity: [ 1] , y: [40, 0] }, { delay: stagger(0.3), duration: 1});
     });
 
 
-    const blocks = document.querySelectorAll('.text-block-4');
-
-    // Итерируем через каждый блок
-    blocks.forEach((block) => {
-        // Применяем функцию inView к каждому блоку отдельно
-        inView(block, (_) => {
-            // Инициализируем SplitType для текущего блока
-            const text = new SplitType(block);
-            text.lines.forEach((line, index) => {
-                // Анимируем каждую линию с учетом индивидуальной задержки и продолжительности
-                animate(line, { opacity: [0, 1], y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.4 });
-            });
-        });
-    });
 
     inView(".main-block", (_) => {
-        const text = new SplitType('.main-title-animation');
-        text.lines.forEach((line, index) => {
-            animate( line, { opacity: [0, 1] , y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.8});
-        });
+        animateText('.main-title-animation');
     });
 
     inView(".about-company-block", (_) => {
-        const text = new SplitType('.title-about-company');
-        text.lines.forEach((line, index) => {
-            animate( line, { opacity: [0, 1] , y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.8});
+        animateText('.title-about-company');
+    });
+
+    const blocks = document.querySelectorAll('.text-block-4');
+    blocks.forEach((block) => {
+        inView(block, (_) => {
+            animateText(block);
         });
     });
 
     inView(".team-block", (_) => {
-        const text = new SplitType('.team-block-title');
-        text.lines.forEach((line, index) => {
-            animate( line, { opacity: [0, 1] , y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.8});
-        });
+        animateText('.team-block-title');
     });
 
     inView(".contact-block", (_) => {
-        const text = new SplitType('.contact-title');
-        text.lines.forEach((line, index) => {
-            animate( line, { opacity: [0, 1] , y: [40, 0] }, { delay: 0.2 + index * 0.2, duration: 0.8});
-        });
+        animateText('.contact-title');
     });
 
 

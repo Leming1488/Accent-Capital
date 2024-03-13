@@ -1,11 +1,48 @@
 import { animate, inView, stagger } from "motion";
 import SplitType from 'split-type';
 
+// window.addEventListener('load', function () {
+//     window.fsAttributes = window.fsAttributes || [];
+//     window.fsAttributes.push([
+//         'cmsnest',
+//         (listInstances) => {
+
+//   const dropdowns = document.querySelectorAll('.dropdown');
+//   dropdowns.forEach(dropdown => {
+//     let isOpen = false; // Состояние открытости аккордеона
+//     const textBlock = dropdown.closest('.collection-item-4').querySelector('.text-block-13');
+//     const vectorsWrapper = dropdown.querySelector('.vectors-wrapper-5');
+//       textBlock.style.maxHeight = '0';
+//       textBlock.style.overflow = 'hidden';
+//       textBlock.style.transition = 'max-height 0.3s ease-out';
+//       dropdown.style.cursor = 'pointer';
+
+//       dropdown.addEventListener('click', function () {
+//         if (!isOpen) {
+//             textBlock.style.maxHeight = textBlock.scrollHeight + 'px';
+//             vectorsWrapper.style.transform = 'rotate(180deg)';
+//             isOpen = true;
+//         } else {
+//             textBlock.style.maxHeight = '0';
+//             vectorsWrapper.style.transform = 'rotate(0deg)';
+//             isOpen = false;
+//         }
+//         });
+
+//   });
+
+//         },
+//     ]);
+// });
+
+
 
 const animateText = (selector, delay = 0.1, duration = 0.6) => {
     const text = new SplitType(selector);
     text.lines.forEach((line) => {
-        line.style.overflow = "hidden";
+        line.style.clipPath = "inset(0 0 0 0)";
+        line.style.transition = 'clip-path 0.3s ease-out';
+
     });
     text.words.forEach((word) => {
         word.style.transform = "translateY(100%)";
@@ -13,9 +50,7 @@ const animateText = (selector, delay = 0.1, duration = 0.6) => {
     text.words.forEach((word, index) => {
         animate( word, { opacity: [0, 1] , translateY: ["100%", "0%"] }, { delay: delay + index * delay, ease: [.25, 1, .5 ,1], duration}).finished.then(() => {
             const parentLine = word.closest('.line');
-            if (parentLine) {
-                parentLine.style.overflow = "initial";
-            }
+            parentLine.style.clipPath = 'inset(0 0 -20% 0)';
         });
     });
 };

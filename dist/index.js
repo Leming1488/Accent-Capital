@@ -1,5 +1,1689 @@
-(()=>{function xt(t,e){t.indexOf(e)===-1&&t.push(e)}var Z=(t,e,r)=>Math.min(Math.max(r,t),e);var x={duration:.3,delay:0,endDelay:0,repeat:0,easing:"ease"};var P=t=>typeof t=="number";var F=t=>Array.isArray(t)&&!P(t[0]);var $t=(t,e,r)=>{let n=e-t;return((r-t)%n+n)%n+t};function Bt(t,e){return F(t)?t[$t(0,t.length,e)]:t}var ft=(t,e,r)=>-r*t+r*e+t;var J=()=>{},S=t=>t;var B=(t,e,r)=>e-t===0?1:(r-t)/(e-t);function wt(t,e){let r=t[t.length-1];for(let n=1;n<=e;n++){let i=B(0,e,n);t.push(ft(r,1,i))}}function kt(t){let e=[0];return wt(e,t-1),e}function Et(t,e=kt(t.length),r=S){let n=t.length,i=n-e.length;return i>0&&wt(e,i),o=>{let s=0;for(;s<n-2&&!(o<e[s+1]);s++);let a=Z(0,1,B(e[s],e[s+1],o));return a=Bt(r,s)(a),ft(t[s],t[s+1],a)}}var Q=t=>Array.isArray(t)&&P(t[0]);var K=t=>typeof t=="object"&&!!t.createAnimation;var O=t=>typeof t=="function";var St=t=>typeof t=="string";var M={ms:t=>t*1e3,s:t=>t/1e3};var zt=(t,e,r)=>(((1-3*r+3*e)*t+(3*r-6*e))*t+3*e)*t,Oe=1e-7,Te=12;function Ce(t,e,r,n,i){let o,s,a=0;do s=e+(r-e)/2,o=zt(s,n,i)-t,o>0?r=s:e=s;while(Math.abs(o)>Oe&&++a<Te);return s}function k(t,e,r,n){if(t===e&&r===n)return S;let i=o=>Ce(o,0,1,t,r);return o=>o===0||o===1?o:zt(i(o),e,n)}var At=(t,e="end")=>r=>{r=e==="end"?Math.min(r,.999):Math.max(r,.001);let n=r*t,i=e==="end"?Math.floor(n):Math.ceil(n);return Z(0,1,i/t)};var Ut={ease:k(.25,.1,.25,1),"ease-in":k(.42,0,1,1),"ease-in-out":k(.42,0,.58,1),"ease-out":k(0,0,.58,1)},De=/\((.*?)\)/;function Y(t){if(O(t))return t;if(Q(t))return k(...t);if(Ut[t])return Ut[t];if(t.startsWith("steps")){let e=De.exec(t);if(e){let r=e[1].split(",");return At(parseFloat(r[0]),r[1].trim())}}return S}var z=class{constructor(e,r=[0,1],{easing:n,duration:i=x.duration,delay:o=x.delay,endDelay:s=x.endDelay,repeat:a=x.repeat,offset:c,direction:l="normal",autoplay:u=!0}={}){if(this.startTime=null,this.rate=1,this.t=0,this.cancelTimestamp=null,this.easing=S,this.duration=0,this.totalDuration=0,this.repeat=0,this.playState="idle",this.finished=new Promise((f,v)=>{this.resolve=f,this.reject=v}),n=n||x.easing,K(n)){let f=n.createAnimation(r);n=f.easing,r=f.keyframes||r,i=f.duration||i}this.repeat=a,this.easing=F(n)?S:Y(n),this.updateDuration(i);let d=Et(r,c,F(n)?n.map(Y):S);this.tick=f=>{var v;o=o;let g=0;this.pauseTime!==void 0?g=this.pauseTime:g=(f-this.startTime)*this.rate,this.t=g,g/=1e3,g=Math.max(g-o,0),this.playState==="finished"&&this.pauseTime===void 0&&(g=this.totalDuration);let w=g/this.duration,I=Math.floor(w),T=w%1;!T&&w>=1&&(T=1),T===1&&I--;let G=I%2;(l==="reverse"||l==="alternate"&&G||l==="alternate-reverse"&&!G)&&(T=1-T);let $=g>=this.totalDuration?1:Math.min(T,1),y=d(this.easing($));e(y),this.pauseTime===void 0&&(this.playState==="finished"||g>=this.totalDuration+s)?(this.playState="finished",(v=this.resolve)===null||v===void 0||v.call(this,y)):this.playState!=="idle"&&(this.frameRequestId=requestAnimationFrame(this.tick))},u&&this.play()}play(){let e=performance.now();this.playState="running",this.pauseTime!==void 0?this.startTime=e-this.pauseTime:this.startTime||(this.startTime=e),this.cancelTimestamp=this.startTime,this.pauseTime=void 0,this.frameRequestId=requestAnimationFrame(this.tick)}pause(){this.playState="paused",this.pauseTime=this.t}finish(){this.playState="finished",this.tick(0)}stop(){var e;this.playState="idle",this.frameRequestId!==void 0&&cancelAnimationFrame(this.frameRequestId),(e=this.reject)===null||e===void 0||e.call(this,!1)}cancel(){this.stop(),this.tick(this.cancelTimestamp)}reverse(){this.rate*=-1}commitStyles(){}updateDuration(e){this.duration=e,this.totalDuration=e*(this.repeat+1)}get currentTime(){return this.t}set currentTime(e){this.pauseTime!==void 0||this.rate===0?this.pauseTime=e:this.startTime=performance.now()-e/this.rate}get playbackRate(){return this.rate}set playbackRate(e){this.rate=e}};var Ot=function(){};var tt=class{setAnimation(e){this.animation=e,e?.finished.then(()=>this.clearAnimation()).catch(()=>{})}clearAnimation(){this.animation=this.generator=void 0}};var Tt=new WeakMap;function lt(t){return Tt.has(t)||Tt.set(t,{transforms:[],values:new Map}),Tt.get(t)}function qt(t,e){return t.has(e)||t.set(e,new tt),t.get(e)}var _e=["","X","Y","Z"],je=["translate","scale","rotate","skew"],et={x:"translateX",y:"translateY",z:"translateZ"},Ht={syntax:"<angle>",initialValue:"0deg",toDefaultUnit:t=>t+"deg"},Pe={translate:{syntax:"<length-percentage>",initialValue:"0px",toDefaultUnit:t=>t+"px"},rotate:Ht,scale:{syntax:"<number>",initialValue:1,toDefaultUnit:S},skew:Ht},V=new Map,pt=t=>`--motion-${t}`,ut=["x","y","z"];je.forEach(t=>{_e.forEach(e=>{ut.push(t+e),V.set(pt(t+e),Pe[t])})});var Fe=(t,e)=>ut.indexOf(t)-ut.indexOf(e),Re=new Set(ut),ht=t=>Re.has(t),Gt=(t,e)=>{et[e]&&(e=et[e]);let{transforms:r}=lt(t);xt(r,e),t.style.transform=Ie(r)},Ie=t=>t.sort(Fe).reduce(Ne,"").trim(),Ne=(t,e)=>`${t} ${e}(var(${pt(e)}))`;var rt=t=>t.startsWith("--"),Kt=new Set;function Yt(t){if(!Kt.has(t)){Kt.add(t);try{let{syntax:e,initialValue:r}=V.has(t)?V.get(t):{};CSS.registerProperty({name:t,inherits:!1,syntax:e,initialValue:r})}catch{}}}var Ct=(t,e)=>document.createElement("div").animate(t,e),Xt={cssRegisterProperty:()=>typeof CSS<"u"&&Object.hasOwnProperty.call(CSS,"registerProperty"),waapi:()=>Object.hasOwnProperty.call(Element.prototype,"animate"),partialKeyframes:()=>{try{Ct({opacity:[1]})}catch{return!1}return!0},finished:()=>!!Ct({opacity:[0,1]},{duration:.001}).finished,linearEasing:()=>{try{Ct({opacity:0},{easing:"linear(0, 1)"})}catch{return!1}return!0}},Dt={},L={};for(let t in Xt)L[t]=()=>(Dt[t]===void 0&&(Dt[t]=Xt[t]()),Dt[t]);var We=.015,Me=(t,e)=>{let r="",n=Math.round(e/We);for(let i=0;i<n;i++)r+=t(B(0,n-1,i))+", ";return r.substring(0,r.length-2)},_t=(t,e)=>O(t)?L.linearEasing()?`linear(${Me(t,e)})`:x.easing:Q(t)?Ve(t):t,Ve=([t,e,r,n])=>`cubic-bezier(${t}, ${e}, ${r}, ${n})`;function Zt(t,e){for(let r=0;r<t.length;r++)t[r]===null&&(t[r]=r?t[r-1]:e());return t}var Jt=t=>Array.isArray(t)?t:[t];function nt(t){return et[t]&&(t=et[t]),ht(t)?pt(t):t}var it={get:(t,e)=>{e=nt(e);let r=rt(e)?t.style.getPropertyValue(e):getComputedStyle(t)[e];if(!r&&r!==0){let n=V.get(e);n&&(r=n.initialValue)}return r},set:(t,e,r)=>{e=nt(e),rt(e)?t.style.setProperty(e,r):t.style[e]=r}};function mt(t,e=!0){if(!(!t||t.playState==="finished"))try{t.stop?t.stop():(e&&t.commitStyles(),t.cancel())}catch{}}function Qt(t,e){var r;let n=e?.toDefaultUnit||S,i=t[t.length-1];if(St(i)){let o=((r=i.match(/(-?[\d.]+)([a-z%]*)/))===null||r===void 0?void 0:r[2])||"";o&&(n=s=>s+o)}return n}function Le(){return window.__MOTION_DEV_TOOLS_RECORD}function te(t,e,r,n={},i){let o=Le(),s=n.record!==!1&&o,a,{duration:c=x.duration,delay:l=x.delay,endDelay:u=x.endDelay,repeat:d=x.repeat,easing:f=x.easing,persist:v=!1,direction:g,offset:w,allowWebkitAcceleration:I=!1,autoplay:T=!0}=n,G=lt(t),$=ht(e),y=L.waapi();$&&Gt(t,e);let p=nt(e),b=qt(G.values,p),E=V.get(p);return mt(b.animation,!(K(f)&&b.generator)&&n.record!==!1),()=>{let D=()=>{var m,j;return(j=(m=it.get(t,p))!==null&&m!==void 0?m:E?.initialValue)!==null&&j!==void 0?j:0},h=Zt(Jt(r),D),_=Qt(h,E);if(K(f)){let m=f.createAnimation(h,e!=="opacity",D,p,b);f=m.easing,h=m.keyframes||h,c=m.duration||c}if(rt(p)&&(L.cssRegisterProperty()?Yt(p):y=!1),$&&!L.linearEasing()&&(O(f)||F(f)&&f.some(O))&&(y=!1),y){E&&(h=h.map(N=>P(N)?E.toDefaultUnit(N):N)),h.length===1&&(!L.partialKeyframes()||s)&&h.unshift(D());let m={delay:M.ms(l),duration:M.ms(c),endDelay:M.ms(u),easing:F(f)?void 0:_t(f,c),direction:g,iterations:d+1,fill:"both"};a=t.animate({[p]:h,offset:w,easing:F(f)?f.map(N=>_t(N,c)):void 0},m),a.finished||(a.finished=new Promise((N,bt)=>{a.onfinish=N,a.oncancel=bt}));let j=h[h.length-1];a.finished.then(()=>{v||(it.set(t,p,j),a.cancel())}).catch(J),I||(a.playbackRate=1.000001)}else if(i&&$)h=h.map(m=>typeof m=="string"?parseFloat(m):m),h.length===1&&h.unshift(parseFloat(D())),a=new i(m=>{it.set(t,p,_?_(m):m)},h,Object.assign(Object.assign({},n),{duration:c,easing:f}));else{let m=h[h.length-1];it.set(t,p,E&&P(m)?E.toDefaultUnit(m):m)}return s&&o(t,e,h,{duration:c,delay:l,easing:f,repeat:d,offset:w},"motion-one"),b.setAnimation(a),a&&!T&&a.pause(),a}}var ee=(t,e)=>t[e]?Object.assign(Object.assign({},t),t[e]):Object.assign({},t);function dt(t,e){var r;return typeof t=="string"?e?((r=e[t])!==null&&r!==void 0||(e[t]=document.querySelectorAll(t)),t=e[t]):t=document.querySelectorAll(t):t instanceof Element&&(t=[t]),Array.from(t||[])}var $e=t=>t(),ot=(t,e,r=x.duration)=>new Proxy({animations:t.map($e).filter(Boolean),duration:r,options:e},ke),Be=t=>t.animations[0],ke={get:(t,e)=>{let r=Be(t);switch(e){case"duration":return t.duration;case"currentTime":return M.s(r?.[e]||0);case"playbackRate":case"playState":return r?.[e];case"finished":return t.finished||(t.finished=Promise.all(t.animations.map(ze)).catch(J)),t.finished;case"stop":return()=>{t.animations.forEach(n=>mt(n))};case"forEachNative":return n=>{t.animations.forEach(i=>n(i,t))};default:return typeof r?.[e]>"u"?void 0:()=>t.animations.forEach(n=>n[e]())}},set:(t,e,r)=>{switch(e){case"currentTime":r=M.ms(r);case"playbackRate":for(let n=0;n<t.animations.length;n++)t.animations[n][e]=r;return!0}return!1}},ze=t=>t.finished;function jt(t=.1,{start:e=0,from:r=0,easing:n}={}){return(i,o)=>{let s=P(r)?r:Ue(r,o),a=Math.abs(s-i),c=t*a;if(n){let l=o*t;c=Y(n)(c/l)*l}return e+c}}function Ue(t,e){if(t==="first")return 0;{let r=e-1;return t==="last"?r:r/2}}function re(t,e,r){return O(t)?t(e,r):t}function ne(t){return function(r,n,i={}){r=dt(r);let o=r.length;Ot(!!o,"No valid element provided."),Ot(!!n,"No keyframes defined.");let s=[];for(let a=0;a<o;a++){let c=r[a];for(let l in n){let u=ee(i,l);u.delay=re(u.delay,a,o);let d=te(c,l,n[l],u,t);s.push(d)}}return ot(s,i,i.duration)}}var Pt=ne(z);var qe={any:0,all:1};function W(t,e,{root:r,margin:n,amount:i="any"}={}){if(typeof IntersectionObserver>"u")return()=>{};let o=dt(t),s=new WeakMap,a=l=>{l.forEach(u=>{let d=s.get(u.target);if(u.isIntersecting!==!!d)if(u.isIntersecting){let f=e(u);O(f)?s.set(u.target,f):c.unobserve(u.target)}else d&&(d(u),s.delete(u.target))})},c=new IntersectionObserver(a,{root:r,rootMargin:n,threshold:typeof i=="number"?i:qe[i]});return o.forEach(l=>c.observe(l)),()=>c.disconnect()}function He(t,e={}){return ot([()=>{let r=new z(t,[0,1],e);return r.finished.catch(()=>{}),r}],e,e.duration)}function at(t,e,r){return(O(t)?He:Pt)(t,e,r)}(function(){function t(){for(var n=arguments.length,i=0;i<n;i++){var o=i<0||arguments.length<=i?void 0:arguments[i];o.nodeType===1||o.nodeType===11?this.appendChild(o):this.appendChild(document.createTextNode(String(o)))}}function e(){for(;this.lastChild;)this.removeChild(this.lastChild);arguments.length&&this.append.apply(this,arguments)}function r(){for(var n=this.parentNode,i=arguments.length,o=new Array(i),s=0;s<i;s++)o[s]=arguments[s];var a=o.length;if(n)for(a||n.removeChild(this);a--;){var c=o[a];typeof c!="object"?c=this.ownerDocument.createTextNode(c):c.parentNode&&c.parentNode.removeChild(c),a?n.insertBefore(this.previousSibling,c):n.replaceChild(c,this)}}typeof Element<"u"&&(Element.prototype.append||(Element.prototype.append=t,DocumentFragment.prototype.append=t),Element.prototype.replaceChildren||(Element.prototype.replaceChildren=e,DocumentFragment.prototype.replaceChildren=e),Element.prototype.replaceWith||(Element.prototype.replaceWith=r,DocumentFragment.prototype.replaceWith=r))})();function Ge(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}function ie(t,e){for(var r=0;r<e.length;r++){var n=e[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}function oe(t,e,r){return e&&ie(t.prototype,e),r&&ie(t,r),t}function Ke(t,e,r){return e in t?Object.defineProperty(t,e,{value:r,enumerable:!0,configurable:!0,writable:!0}):t[e]=r,t}function ae(t,e){var r=Object.keys(t);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(t);e&&(n=n.filter(function(i){return Object.getOwnPropertyDescriptor(t,i).enumerable})),r.push.apply(r,n)}return r}function se(t){for(var e=1;e<arguments.length;e++){var r=arguments[e]!=null?arguments[e]:{};e%2?ae(Object(r),!0).forEach(function(n){Ke(t,n,r[n])}):Object.getOwnPropertyDescriptors?Object.defineProperties(t,Object.getOwnPropertyDescriptors(r)):ae(Object(r)).forEach(function(n){Object.defineProperty(t,n,Object.getOwnPropertyDescriptor(r,n))})}return t}function fe(t,e){return Xe(t)||Je(t,e)||le(t,e)||tr()}function A(t){return Ye(t)||Ze(t)||le(t)||Qe()}function Ye(t){if(Array.isArray(t))return Ft(t)}function Xe(t){if(Array.isArray(t))return t}function Ze(t){if(typeof Symbol<"u"&&Symbol.iterator in Object(t))return Array.from(t)}function Je(t,e){if(!(typeof Symbol>"u"||!(Symbol.iterator in Object(t)))){var r=[],n=!0,i=!1,o=void 0;try{for(var s=t[Symbol.iterator](),a;!(n=(a=s.next()).done)&&(r.push(a.value),!(e&&r.length===e));n=!0);}catch(c){i=!0,o=c}finally{try{!n&&s.return!=null&&s.return()}finally{if(i)throw o}}return r}}function le(t,e){if(t){if(typeof t=="string")return Ft(t,e);var r=Object.prototype.toString.call(t).slice(8,-1);if(r==="Object"&&t.constructor&&(r=t.constructor.name),r==="Map"||r==="Set")return Array.from(t);if(r==="Arguments"||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r))return Ft(t,e)}}function Ft(t,e){(e==null||e>t.length)&&(e=t.length);for(var r=0,n=new Array(e);r<e;r++)n[r]=t[r];return n}function Qe(){throw new TypeError(`Invalid attempt to spread non-iterable instance.
-In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`)}function tr(){throw new TypeError(`Invalid attempt to destructure non-iterable instance.
-In order to be iterable, non-array objects must have a [Symbol.iterator]() method.`)}function U(t,e){return Object.getOwnPropertyNames(Object(t)).reduce(function(r,n){var i=Object.getOwnPropertyDescriptor(Object(t),n),o=Object.getOwnPropertyDescriptor(Object(e),n);return Object.defineProperty(r,n,o||i)},{})}function st(t){return typeof t=="string"}function Wt(t){return Array.isArray(t)}function gt(){var t=arguments.length>0&&arguments[0]!==void 0?arguments[0]:{},e=U(t),r;return e.types!==void 0?r=e.types:e.split!==void 0&&(r=e.split),r!==void 0&&(e.types=(st(r)||Wt(r)?String(r):"").split(",").map(function(n){return String(n).trim()}).filter(function(n){return/((line)|(word)|(char))/i.test(n)})),(e.absolute||e.position)&&(e.absolute=e.absolute||/absolute/.test(t.position)),e}function Mt(t){var e=st(t)||Wt(t)?String(t):"";return{none:!e,lines:/line/i.test(e),words:/word/i.test(e),chars:/char/i.test(e)}}function vt(t){return t!==null&&typeof t=="object"}function er(t){return vt(t)&&/^(1|3|11)$/.test(t.nodeType)}function rr(t){return typeof t=="number"&&t>-1&&t%1===0}function nr(t){return vt(t)&&rr(t.length)}function H(t){return Wt(t)?t:t==null?[]:nr(t)?Array.prototype.slice.call(t):[t]}function ce(t){var e=t;return st(t)&&(/^(#[a-z]\w+)$/.test(t.trim())?e=document.getElementById(t.trim().slice(1)):e=document.querySelectorAll(t)),H(e).reduce(function(r,n){return[].concat(A(r),A(H(n).filter(er)))},[])}var ir=Object.entries,yt="_splittype",C={},or=0;function R(t,e,r){if(!vt(t))return console.warn("[data.set] owner is not an object"),null;var n=t[yt]||(t[yt]=++or),i=C[n]||(C[n]={});return r===void 0?e&&Object.getPrototypeOf(e)===Object.prototype&&(C[n]=se(se({},i),e)):e!==void 0&&(i[e]=r),r}function q(t,e){var r=vt(t)?t[yt]:null,n=r&&C[r]||{};return e===void 0?n:n[e]}function ue(t){var e=t&&t[yt];e&&(delete t[e],delete C[e])}function ar(){Object.keys(C).forEach(function(t){delete C[t]})}function sr(){ir(C).forEach(function(t){var e=fe(t,2),r=e[0],n=e[1],i=n.isRoot,o=n.isSplit;(!i||!o)&&(C[r]=null,delete C[r])})}function cr(t){var e=arguments.length>1&&arguments[1]!==void 0?arguments[1]:" ",r=t?String(t):"";return r.trim().replace(/\s+/g," ").split(e)}var Vt="\\ud800-\\udfff",pe="\\u0300-\\u036f\\ufe20-\\ufe23",he="\\u20d0-\\u20f0",me="\\ufe0e\\ufe0f",fr="[".concat(Vt,"]"),Rt="[".concat(pe).concat(he,"]"),It="\\ud83c[\\udffb-\\udfff]",lr="(?:".concat(Rt,"|").concat(It,")"),de="[^".concat(Vt,"]"),ge="(?:\\ud83c[\\udde6-\\uddff]){2}",ye="[\\ud800-\\udbff][\\udc00-\\udfff]",ve="\\u200d",be="".concat(lr,"?"),xe="[".concat(me,"]?"),ur="(?:"+ve+"(?:"+[de,ge,ye].join("|")+")"+xe+be+")*",pr=xe+be+ur,hr="(?:".concat(["".concat(de).concat(Rt,"?"),Rt,ge,ye,fr].join("|"),`
-)`),mr=RegExp("".concat(It,"(?=").concat(It,")|").concat(hr).concat(pr),"g"),dr=[ve,Vt,pe,he,me],gr=RegExp("[".concat(dr.join(""),"]"));function yr(t){return t.split("")}function we(t){return gr.test(t)}function vr(t){return t.match(mr)||[]}function br(t){return we(t)?vr(t):yr(t)}function xr(t){return t==null?"":String(t)}function wr(t){var e=arguments.length>1&&arguments[1]!==void 0?arguments[1]:"";return t=xr(t),t&&st(t)&&!e&&we(t)?br(t):t.split(e)}function Nt(t,e){var r=document.createElement(t);return e&&Object.keys(e).forEach(function(n){var i=e[n],o=st(i)?i.trim():i;o===null||o===""||(n==="children"?r.append.apply(r,A(H(o))):r.setAttribute(n,o))}),r}var Lt={splitClass:"",lineClass:"line",wordClass:"word",charClass:"char",types:["lines","words","chars"],absolute:!1,tagName:"div"};function Er(t,e){e=U(Lt,e);var r=Mt(e.types),n=e.tagName,i=t.nodeValue,o=document.createDocumentFragment(),s=[],a=[];return/^\s/.test(i)&&o.append(" "),s=cr(i).reduce(function(c,l,u,d){var f,v;return r.chars&&(v=wr(l).map(function(g){var w=Nt(n,{class:"".concat(e.splitClass," ").concat(e.charClass),style:"display: inline-block;",children:g});return R(w,"isChar",!0),a=[].concat(A(a),[w]),w})),r.words||r.lines?(f=Nt(n,{class:"".concat(e.wordClass," ").concat(e.splitClass),style:"display: inline-block; ".concat(r.words&&e.absolute?"position: relative;":""),children:r.chars?v:l}),R(f,{isWord:!0,isWordStart:!0,isWordEnd:!0}),o.appendChild(f)):v.forEach(function(g){o.appendChild(g)}),u<d.length-1&&o.append(" "),r.words?c.concat(f):c},[]),/\s$/.test(i)&&o.append(" "),t.replaceWith(o),{words:s,chars:a}}function Ee(t,e){var r=t.nodeType,n={words:[],chars:[]};if(!/(1|3|11)/.test(r))return n;if(r===3&&/\S/.test(t.nodeValue))return Er(t,e);var i=H(t.childNodes);if(i.length&&(R(t,"isSplit",!0),!q(t).isRoot)){t.style.display="inline-block",t.style.position="relative";var o=t.nextSibling,s=t.previousSibling,a=t.textContent||"",c=o?o.textContent:" ",l=s?s.textContent:" ";R(t,{isWordEnd:/\s$/.test(a)||/^\s/.test(c),isWordStart:/^\s/.test(a)||/\s$/.test(l)})}return i.reduce(function(u,d){var f=Ee(d,e),v=f.words,g=f.chars;return{words:[].concat(A(u.words),A(v)),chars:[].concat(A(u.chars),A(g))}},n)}function Sr(t,e,r,n){if(!r.absolute)return{top:e?t.offsetTop:null};var i=t.offsetParent,o=fe(n,2),s=o[0],a=o[1],c=0,l=0;if(i&&i!==document.body){var u=i.getBoundingClientRect();c=u.x+s,l=u.y+a}var d=t.getBoundingClientRect(),f=d.width,v=d.height,g=d.x,w=d.y,I=w+a-l,T=g+s-c;return{width:f,height:v,top:I,left:T}}function Se(t){q(t).isWord?(ue(t),t.replaceWith.apply(t,A(t.childNodes))):H(t.children).forEach(function(e){return Se(e)})}var Ar=function(){return document.createDocumentFragment()};function Or(t,e,r){var n=Mt(e.types),i=e.tagName,o=t.getElementsByTagName("*"),s=[],a=[],c=null,l,u,d,f=[],v=t.parentElement,g=t.nextElementSibling,w=Ar(),I=window.getComputedStyle(t),T=I.textAlign,G=parseFloat(I.fontSize),$=G*.2;return e.absolute&&(d={left:t.offsetLeft,top:t.offsetTop,width:t.offsetWidth},u=t.offsetWidth,l=t.offsetHeight,R(t,{cssWidth:t.style.width,cssHeight:t.style.height})),H(o).forEach(function(y){var p=y.parentElement===t,b=Sr(y,p,e,r),E=b.width,D=b.height,h=b.top,_=b.left;/^br$/i.test(y.nodeName)||(n.lines&&p&&((c===null||h-c>=$)&&(c=h,s.push(a=[])),a.push(y)),e.absolute&&R(y,{top:h,left:_,width:E,height:D}))}),v&&v.removeChild(t),n.lines&&(f=s.map(function(y){var p=Nt(i,{class:"".concat(e.splitClass," ").concat(e.lineClass),style:"display: block; text-align: ".concat(T,"; width: 100%;")});R(p,"isLine",!0);var b={height:0,top:1e4};return w.appendChild(p),y.forEach(function(E,D,h){var _=q(E),m=_.isWordEnd,j=_.top,N=_.height,bt=h[D+1];b.height=Math.max(b.height,N),b.top=Math.min(b.top,j),p.appendChild(E),m&&q(bt).isWordStart&&p.append(" ")}),e.absolute&&R(p,{height:b.height,top:b.top}),p}),n.words||Se(w),t.replaceChildren(w)),e.absolute&&(t.style.width="".concat(t.style.width||u,"px"),t.style.height="".concat(l,"px"),H(o).forEach(function(y){var p=q(y),b=p.isLine,E=p.top,D=p.left,h=p.width,_=p.height,m=q(y.parentElement),j=!b&&m.isLine;y.style.top="".concat(j?E-m.top:E,"px"),y.style.left=b?"".concat(d.left,"px"):"".concat(D-(j?d.left:0),"px"),y.style.height="".concat(_,"px"),y.style.width=b?"".concat(d.width,"px"):"".concat(h,"px"),y.style.position="absolute"})),v&&(g?v.insertBefore(t,g):v.appendChild(t)),f}var X=U(Lt,{}),Ae=function(){oe(t,null,[{key:"clearData",value:function(){ar()}},{key:"setDefaults",value:function(r){return X=U(X,gt(r)),Lt}},{key:"revert",value:function(r){ce(r).forEach(function(n){var i=q(n),o=i.isSplit,s=i.html,a=i.cssWidth,c=i.cssHeight;o&&(n.innerHTML=s,n.style.width=a||"",n.style.height=c||"",ue(n))})}},{key:"create",value:function(r,n){return new t(r,n)}},{key:"data",get:function(){return C}},{key:"defaults",get:function(){return X},set:function(r){X=U(X,gt(r))}}]);function t(e,r){Ge(this,t),this.isSplit=!1,this.settings=U(X,gt(r)),this.elements=ce(e),this.split()}return oe(t,[{key:"split",value:function(r){var n=this;this.revert(),this.elements.forEach(function(s){R(s,"html",s.innerHTML)}),this.lines=[],this.words=[],this.chars=[];var i=[window.pageXOffset,window.pageYOffset];r!==void 0&&(this.settings=U(this.settings,gt(r)));var o=Mt(this.settings.types);o.none||(this.elements.forEach(function(s){R(s,"isRoot",!0);var a=Ee(s,n.settings),c=a.words,l=a.chars;n.words=[].concat(A(n.words),A(c)),n.chars=[].concat(A(n.chars),A(l))}),this.elements.forEach(function(s){if(o.lines||n.settings.absolute){var a=Or(s,n.settings,i);n.lines=[].concat(A(n.lines),A(a))}}),this.isSplit=!0,window.scrollTo(i[0],i[1]),sr())}},{key:"revert",value:function(){this.isSplit&&(this.lines=null,this.words=null,this.chars=null,this.isSplit=!1),t.revert(this.elements)}}]),t}();var ct=(t,e=.1,r=.6)=>{let n=new Ae(t);n.lines.forEach(i=>{i.style.clipPath="inset(0 0 0 0)",i.style.transition="clip-path 0.3s ease-out"}),n.words.forEach(i=>{i.style.transform="translateY(100%)"}),n.words.forEach((i,o)=>{at(i,{opacity:[0,1],translateY:["100%","0%"]},{delay:e+o*e,ease:[.25,1,.5,1],duration:r}).finished.then(()=>{let s=i.closest(".line");s.style.clipPath="inset(0 0 -20% 0)"})})};if(window.innerWidth>991){document.querySelectorAll(".achievement-tile").forEach((a,c)=>{a.style.opacity=0}),W(".div-block-9",a=>{at(".achievement-tile",{opacity:[1],y:[40,0]},{delay:jt(.3),duration:1})}),W(".main-block",a=>{ct(".main-title-animation")}),W(".about-company-block",a=>{ct(".title-about-company")}),document.querySelectorAll(".text-block-4").forEach(a=>{W(a,c=>{ct(a)})}),W(".team-block",a=>{ct(".team-block-title")}),W(".contact-block",a=>{ct(".contact-title")});let r=document.querySelectorAll(".service-card-cms "),n=window.innerWidth>1279?3:2,i=.2,o=Math.ceil(r.length/n),s=new Array(o).fill().map(()=>[]);r.forEach((a,c)=>{a.style.opacity=0;let l=c%o;s[l].push({item:a})}),s.forEach(a=>{W(a[0].item,c=>{a.forEach((l,u)=>{at(l.item,{opacity:[1],y:[40,0]},{delay:i*u,duration:.5})})})})}})();
-//# sourceMappingURL=index.js.map
+(() => {
+  // node_modules/@motionone/utils/dist/array.es.js
+  function addUniqueItem(array, item) {
+    array.indexOf(item) === -1 && array.push(item);
+  }
+
+  // node_modules/@motionone/utils/dist/clamp.es.js
+  var clamp = (min, max, v) => Math.min(Math.max(v, min), max);
+
+  // node_modules/@motionone/utils/dist/defaults.es.js
+  var defaults = {
+    duration: 0.3,
+    delay: 0,
+    endDelay: 0,
+    repeat: 0,
+    easing: "ease"
+  };
+
+  // node_modules/@motionone/utils/dist/is-number.es.js
+  var isNumber = (value) => typeof value === "number";
+
+  // node_modules/@motionone/utils/dist/is-easing-list.es.js
+  var isEasingList = (easing) => Array.isArray(easing) && !isNumber(easing[0]);
+
+  // node_modules/@motionone/utils/dist/wrap.es.js
+  var wrap = (min, max, v) => {
+    const rangeSize = max - min;
+    return ((v - min) % rangeSize + rangeSize) % rangeSize + min;
+  };
+
+  // node_modules/@motionone/utils/dist/easing.es.js
+  function getEasingForSegment(easing, i) {
+    return isEasingList(easing) ? easing[wrap(0, easing.length, i)] : easing;
+  }
+
+  // node_modules/@motionone/utils/dist/mix.es.js
+  var mix = (min, max, progress2) => -progress2 * min + progress2 * max + min;
+
+  // node_modules/@motionone/utils/dist/noop.es.js
+  var noop = () => {
+  };
+  var noopReturn = (v) => v;
+
+  // node_modules/@motionone/utils/dist/progress.es.js
+  var progress = (min, max, value) => max - min === 0 ? 1 : (value - min) / (max - min);
+
+  // node_modules/@motionone/utils/dist/offset.es.js
+  function fillOffset(offset, remaining) {
+    const min = offset[offset.length - 1];
+    for (let i = 1; i <= remaining; i++) {
+      const offsetProgress = progress(0, remaining, i);
+      offset.push(mix(min, 1, offsetProgress));
+    }
+  }
+  function defaultOffset(length) {
+    const offset = [0];
+    fillOffset(offset, length - 1);
+    return offset;
+  }
+
+  // node_modules/@motionone/utils/dist/interpolate.es.js
+  function interpolate(output, input = defaultOffset(output.length), easing = noopReturn) {
+    const length = output.length;
+    const remainder = length - input.length;
+    remainder > 0 && fillOffset(input, remainder);
+    return (t) => {
+      let i = 0;
+      for (; i < length - 2; i++) {
+        if (t < input[i + 1])
+          break;
+      }
+      let progressInRange = clamp(0, 1, progress(input[i], input[i + 1], t));
+      const segmentEasing = getEasingForSegment(easing, i);
+      progressInRange = segmentEasing(progressInRange);
+      return mix(output[i], output[i + 1], progressInRange);
+    };
+  }
+
+  // node_modules/@motionone/utils/dist/is-cubic-bezier.es.js
+  var isCubicBezier = (easing) => Array.isArray(easing) && isNumber(easing[0]);
+
+  // node_modules/@motionone/utils/dist/is-easing-generator.es.js
+  var isEasingGenerator = (easing) => typeof easing === "object" && Boolean(easing.createAnimation);
+
+  // node_modules/@motionone/utils/dist/is-function.es.js
+  var isFunction = (value) => typeof value === "function";
+
+  // node_modules/@motionone/utils/dist/is-string.es.js
+  var isString = (value) => typeof value === "string";
+
+  // node_modules/@motionone/utils/dist/time.es.js
+  var time = {
+    ms: (seconds) => seconds * 1e3,
+    s: (milliseconds) => milliseconds / 1e3
+  };
+
+  // node_modules/@motionone/easing/dist/cubic-bezier.es.js
+  var calcBezier = (t, a1, a2) => (((1 - 3 * a2 + 3 * a1) * t + (3 * a2 - 6 * a1)) * t + 3 * a1) * t;
+  var subdivisionPrecision = 1e-7;
+  var subdivisionMaxIterations = 12;
+  function binarySubdivide(x, lowerBound, upperBound, mX1, mX2) {
+    let currentX;
+    let currentT;
+    let i = 0;
+    do {
+      currentT = lowerBound + (upperBound - lowerBound) / 2;
+      currentX = calcBezier(currentT, mX1, mX2) - x;
+      if (currentX > 0) {
+        upperBound = currentT;
+      } else {
+        lowerBound = currentT;
+      }
+    } while (Math.abs(currentX) > subdivisionPrecision && ++i < subdivisionMaxIterations);
+    return currentT;
+  }
+  function cubicBezier(mX1, mY1, mX2, mY2) {
+    if (mX1 === mY1 && mX2 === mY2)
+      return noopReturn;
+    const getTForX = (aX) => binarySubdivide(aX, 0, 1, mX1, mX2);
+    return (t) => t === 0 || t === 1 ? t : calcBezier(getTForX(t), mY1, mY2);
+  }
+
+  // node_modules/@motionone/easing/dist/steps.es.js
+  var steps = (steps2, direction = "end") => (progress2) => {
+    progress2 = direction === "end" ? Math.min(progress2, 0.999) : Math.max(progress2, 1e-3);
+    const expanded = progress2 * steps2;
+    const rounded = direction === "end" ? Math.floor(expanded) : Math.ceil(expanded);
+    return clamp(0, 1, rounded / steps2);
+  };
+
+  // node_modules/@motionone/animation/dist/utils/easing.es.js
+  var namedEasings = {
+    ease: cubicBezier(0.25, 0.1, 0.25, 1),
+    "ease-in": cubicBezier(0.42, 0, 1, 1),
+    "ease-in-out": cubicBezier(0.42, 0, 0.58, 1),
+    "ease-out": cubicBezier(0, 0, 0.58, 1)
+  };
+  var functionArgsRegex = /\((.*?)\)/;
+  function getEasingFunction(definition) {
+    if (isFunction(definition))
+      return definition;
+    if (isCubicBezier(definition))
+      return cubicBezier(...definition);
+    if (namedEasings[definition])
+      return namedEasings[definition];
+    if (definition.startsWith("steps")) {
+      const args = functionArgsRegex.exec(definition);
+      if (args) {
+        const argsArray = args[1].split(",");
+        return steps(parseFloat(argsArray[0]), argsArray[1].trim());
+      }
+    }
+    return noopReturn;
+  }
+
+  // node_modules/@motionone/animation/dist/Animation.es.js
+  var Animation = class {
+    constructor(output, keyframes = [0, 1], { easing, duration: initialDuration = defaults.duration, delay = defaults.delay, endDelay = defaults.endDelay, repeat = defaults.repeat, offset, direction = "normal", autoplay = true } = {}) {
+      this.startTime = null;
+      this.rate = 1;
+      this.t = 0;
+      this.cancelTimestamp = null;
+      this.easing = noopReturn;
+      this.duration = 0;
+      this.totalDuration = 0;
+      this.repeat = 0;
+      this.playState = "idle";
+      this.finished = new Promise((resolve, reject) => {
+        this.resolve = resolve;
+        this.reject = reject;
+      });
+      easing = easing || defaults.easing;
+      if (isEasingGenerator(easing)) {
+        const custom = easing.createAnimation(keyframes);
+        easing = custom.easing;
+        keyframes = custom.keyframes || keyframes;
+        initialDuration = custom.duration || initialDuration;
+      }
+      this.repeat = repeat;
+      this.easing = isEasingList(easing) ? noopReturn : getEasingFunction(easing);
+      this.updateDuration(initialDuration);
+      const interpolate$1 = interpolate(keyframes, offset, isEasingList(easing) ? easing.map(getEasingFunction) : noopReturn);
+      this.tick = (timestamp) => {
+        var _a;
+        delay = delay;
+        let t = 0;
+        if (this.pauseTime !== void 0) {
+          t = this.pauseTime;
+        } else {
+          t = (timestamp - this.startTime) * this.rate;
+        }
+        this.t = t;
+        t /= 1e3;
+        t = Math.max(t - delay, 0);
+        if (this.playState === "finished" && this.pauseTime === void 0) {
+          t = this.totalDuration;
+        }
+        const progress2 = t / this.duration;
+        let currentIteration = Math.floor(progress2);
+        let iterationProgress = progress2 % 1;
+        if (!iterationProgress && progress2 >= 1) {
+          iterationProgress = 1;
+        }
+        iterationProgress === 1 && currentIteration--;
+        const iterationIsOdd = currentIteration % 2;
+        if (direction === "reverse" || direction === "alternate" && iterationIsOdd || direction === "alternate-reverse" && !iterationIsOdd) {
+          iterationProgress = 1 - iterationProgress;
+        }
+        const p = t >= this.totalDuration ? 1 : Math.min(iterationProgress, 1);
+        const latest = interpolate$1(this.easing(p));
+        output(latest);
+        const isAnimationFinished = this.pauseTime === void 0 && (this.playState === "finished" || t >= this.totalDuration + endDelay);
+        if (isAnimationFinished) {
+          this.playState = "finished";
+          (_a = this.resolve) === null || _a === void 0 ? void 0 : _a.call(this, latest);
+        } else if (this.playState !== "idle") {
+          this.frameRequestId = requestAnimationFrame(this.tick);
+        }
+      };
+      if (autoplay)
+        this.play();
+    }
+    play() {
+      const now = performance.now();
+      this.playState = "running";
+      if (this.pauseTime !== void 0) {
+        this.startTime = now - this.pauseTime;
+      } else if (!this.startTime) {
+        this.startTime = now;
+      }
+      this.cancelTimestamp = this.startTime;
+      this.pauseTime = void 0;
+      this.frameRequestId = requestAnimationFrame(this.tick);
+    }
+    pause() {
+      this.playState = "paused";
+      this.pauseTime = this.t;
+    }
+    finish() {
+      this.playState = "finished";
+      this.tick(0);
+    }
+    stop() {
+      var _a;
+      this.playState = "idle";
+      if (this.frameRequestId !== void 0) {
+        cancelAnimationFrame(this.frameRequestId);
+      }
+      (_a = this.reject) === null || _a === void 0 ? void 0 : _a.call(this, false);
+    }
+    cancel() {
+      this.stop();
+      this.tick(this.cancelTimestamp);
+    }
+    reverse() {
+      this.rate *= -1;
+    }
+    commitStyles() {
+    }
+    updateDuration(duration) {
+      this.duration = duration;
+      this.totalDuration = duration * (this.repeat + 1);
+    }
+    get currentTime() {
+      return this.t;
+    }
+    set currentTime(t) {
+      if (this.pauseTime !== void 0 || this.rate === 0) {
+        this.pauseTime = t;
+      } else {
+        this.startTime = performance.now() - t / this.rate;
+      }
+    }
+    get playbackRate() {
+      return this.rate;
+    }
+    set playbackRate(rate) {
+      this.rate = rate;
+    }
+  };
+
+  // node_modules/hey-listen/dist/hey-listen.es.js
+  var warning = function() {
+  };
+  var invariant = function() {
+  };
+  if (true) {
+    warning = function(check, message) {
+      if (!check && typeof console !== "undefined") {
+        console.warn(message);
+      }
+    };
+    invariant = function(check, message) {
+      if (!check) {
+        throw new Error(message);
+      }
+    };
+  }
+
+  // node_modules/@motionone/types/dist/MotionValue.es.js
+  var MotionValue = class {
+    setAnimation(animation) {
+      this.animation = animation;
+      animation === null || animation === void 0 ? void 0 : animation.finished.then(() => this.clearAnimation()).catch(() => {
+      });
+    }
+    clearAnimation() {
+      this.animation = this.generator = void 0;
+    }
+  };
+
+  // node_modules/@motionone/dom/dist/animate/data.es.js
+  var data = /* @__PURE__ */ new WeakMap();
+  function getAnimationData(element) {
+    if (!data.has(element)) {
+      data.set(element, {
+        transforms: [],
+        values: /* @__PURE__ */ new Map()
+      });
+    }
+    return data.get(element);
+  }
+  function getMotionValue(motionValues, name) {
+    if (!motionValues.has(name)) {
+      motionValues.set(name, new MotionValue());
+    }
+    return motionValues.get(name);
+  }
+
+  // node_modules/@motionone/dom/dist/animate/utils/transforms.es.js
+  var axes = ["", "X", "Y", "Z"];
+  var order = ["translate", "scale", "rotate", "skew"];
+  var transformAlias = {
+    x: "translateX",
+    y: "translateY",
+    z: "translateZ"
+  };
+  var rotation = {
+    syntax: "<angle>",
+    initialValue: "0deg",
+    toDefaultUnit: (v) => v + "deg"
+  };
+  var baseTransformProperties = {
+    translate: {
+      syntax: "<length-percentage>",
+      initialValue: "0px",
+      toDefaultUnit: (v) => v + "px"
+    },
+    rotate: rotation,
+    scale: {
+      syntax: "<number>",
+      initialValue: 1,
+      toDefaultUnit: noopReturn
+    },
+    skew: rotation
+  };
+  var transformDefinitions = /* @__PURE__ */ new Map();
+  var asTransformCssVar = (name) => `--motion-${name}`;
+  var transforms = ["x", "y", "z"];
+  order.forEach((name) => {
+    axes.forEach((axis) => {
+      transforms.push(name + axis);
+      transformDefinitions.set(asTransformCssVar(name + axis), baseTransformProperties[name]);
+    });
+  });
+  var compareTransformOrder = (a, b) => transforms.indexOf(a) - transforms.indexOf(b);
+  var transformLookup = new Set(transforms);
+  var isTransform = (name) => transformLookup.has(name);
+  var addTransformToElement = (element, name) => {
+    if (transformAlias[name])
+      name = transformAlias[name];
+    const { transforms: transforms2 } = getAnimationData(element);
+    addUniqueItem(transforms2, name);
+    element.style.transform = buildTransformTemplate(transforms2);
+  };
+  var buildTransformTemplate = (transforms2) => transforms2.sort(compareTransformOrder).reduce(transformListToString, "").trim();
+  var transformListToString = (template, name) => `${template} ${name}(var(${asTransformCssVar(name)}))`;
+
+  // node_modules/@motionone/dom/dist/animate/utils/css-var.es.js
+  var isCssVar = (name) => name.startsWith("--");
+  var registeredProperties = /* @__PURE__ */ new Set();
+  function registerCssVariable(name) {
+    if (registeredProperties.has(name))
+      return;
+    registeredProperties.add(name);
+    try {
+      const { syntax, initialValue } = transformDefinitions.has(name) ? transformDefinitions.get(name) : {};
+      CSS.registerProperty({
+        name,
+        inherits: false,
+        syntax,
+        initialValue
+      });
+    } catch (e) {
+    }
+  }
+
+  // node_modules/@motionone/dom/dist/animate/utils/feature-detection.es.js
+  var testAnimation = (keyframes, options) => document.createElement("div").animate(keyframes, options);
+  var featureTests = {
+    cssRegisterProperty: () => typeof CSS !== "undefined" && Object.hasOwnProperty.call(CSS, "registerProperty"),
+    waapi: () => Object.hasOwnProperty.call(Element.prototype, "animate"),
+    partialKeyframes: () => {
+      try {
+        testAnimation({ opacity: [1] });
+      } catch (e) {
+        return false;
+      }
+      return true;
+    },
+    finished: () => Boolean(testAnimation({ opacity: [0, 1] }, { duration: 1e-3 }).finished),
+    linearEasing: () => {
+      try {
+        testAnimation({ opacity: 0 }, { easing: "linear(0, 1)" });
+      } catch (e) {
+        return false;
+      }
+      return true;
+    }
+  };
+  var results = {};
+  var supports = {};
+  for (const key in featureTests) {
+    supports[key] = () => {
+      if (results[key] === void 0)
+        results[key] = featureTests[key]();
+      return results[key];
+    };
+  }
+
+  // node_modules/@motionone/dom/dist/animate/utils/easing.es.js
+  var resolution = 0.015;
+  var generateLinearEasingPoints = (easing, duration) => {
+    let points = "";
+    const numPoints = Math.round(duration / resolution);
+    for (let i = 0; i < numPoints; i++) {
+      points += easing(progress(0, numPoints - 1, i)) + ", ";
+    }
+    return points.substring(0, points.length - 2);
+  };
+  var convertEasing = (easing, duration) => {
+    if (isFunction(easing)) {
+      return supports.linearEasing() ? `linear(${generateLinearEasingPoints(easing, duration)})` : defaults.easing;
+    } else {
+      return isCubicBezier(easing) ? cubicBezierAsString(easing) : easing;
+    }
+  };
+  var cubicBezierAsString = ([a, b, c, d]) => `cubic-bezier(${a}, ${b}, ${c}, ${d})`;
+
+  // node_modules/@motionone/dom/dist/animate/utils/keyframes.es.js
+  function hydrateKeyframes(keyframes, readInitialValue) {
+    for (let i = 0; i < keyframes.length; i++) {
+      if (keyframes[i] === null) {
+        keyframes[i] = i ? keyframes[i - 1] : readInitialValue();
+      }
+    }
+    return keyframes;
+  }
+  var keyframesList = (keyframes) => Array.isArray(keyframes) ? keyframes : [keyframes];
+
+  // node_modules/@motionone/dom/dist/animate/utils/get-style-name.es.js
+  function getStyleName(key) {
+    if (transformAlias[key])
+      key = transformAlias[key];
+    return isTransform(key) ? asTransformCssVar(key) : key;
+  }
+
+  // node_modules/@motionone/dom/dist/animate/style.es.js
+  var style = {
+    get: (element, name) => {
+      name = getStyleName(name);
+      let value = isCssVar(name) ? element.style.getPropertyValue(name) : getComputedStyle(element)[name];
+      if (!value && value !== 0) {
+        const definition = transformDefinitions.get(name);
+        if (definition)
+          value = definition.initialValue;
+      }
+      return value;
+    },
+    set: (element, name, value) => {
+      name = getStyleName(name);
+      if (isCssVar(name)) {
+        element.style.setProperty(name, value);
+      } else {
+        element.style[name] = value;
+      }
+    }
+  };
+
+  // node_modules/@motionone/dom/dist/animate/utils/stop-animation.es.js
+  function stopAnimation(animation, needsCommit = true) {
+    if (!animation || animation.playState === "finished")
+      return;
+    try {
+      if (animation.stop) {
+        animation.stop();
+      } else {
+        needsCommit && animation.commitStyles();
+        animation.cancel();
+      }
+    } catch (e) {
+    }
+  }
+
+  // node_modules/@motionone/dom/dist/animate/utils/get-unit.es.js
+  function getUnitConverter(keyframes, definition) {
+    var _a;
+    let toUnit = (definition === null || definition === void 0 ? void 0 : definition.toDefaultUnit) || noopReturn;
+    const finalKeyframe = keyframes[keyframes.length - 1];
+    if (isString(finalKeyframe)) {
+      const unit = ((_a = finalKeyframe.match(/(-?[\d.]+)([a-z%]*)/)) === null || _a === void 0 ? void 0 : _a[2]) || "";
+      if (unit)
+        toUnit = (value) => value + unit;
+    }
+    return toUnit;
+  }
+
+  // node_modules/@motionone/dom/dist/animate/animate-style.es.js
+  function getDevToolsRecord() {
+    return window.__MOTION_DEV_TOOLS_RECORD;
+  }
+  function animateStyle(element, key, keyframesDefinition, options = {}, AnimationPolyfill) {
+    const record = getDevToolsRecord();
+    const isRecording = options.record !== false && record;
+    let animation;
+    let { duration = defaults.duration, delay = defaults.delay, endDelay = defaults.endDelay, repeat = defaults.repeat, easing = defaults.easing, persist = false, direction, offset, allowWebkitAcceleration = false, autoplay = true } = options;
+    const data2 = getAnimationData(element);
+    const valueIsTransform = isTransform(key);
+    let canAnimateNatively = supports.waapi();
+    valueIsTransform && addTransformToElement(element, key);
+    const name = getStyleName(key);
+    const motionValue = getMotionValue(data2.values, name);
+    const definition = transformDefinitions.get(name);
+    stopAnimation(motionValue.animation, !(isEasingGenerator(easing) && motionValue.generator) && options.record !== false);
+    return () => {
+      const readInitialValue = () => {
+        var _a, _b;
+        return (_b = (_a = style.get(element, name)) !== null && _a !== void 0 ? _a : definition === null || definition === void 0 ? void 0 : definition.initialValue) !== null && _b !== void 0 ? _b : 0;
+      };
+      let keyframes = hydrateKeyframes(keyframesList(keyframesDefinition), readInitialValue);
+      const toUnit = getUnitConverter(keyframes, definition);
+      if (isEasingGenerator(easing)) {
+        const custom = easing.createAnimation(keyframes, key !== "opacity", readInitialValue, name, motionValue);
+        easing = custom.easing;
+        keyframes = custom.keyframes || keyframes;
+        duration = custom.duration || duration;
+      }
+      if (isCssVar(name)) {
+        if (supports.cssRegisterProperty()) {
+          registerCssVariable(name);
+        } else {
+          canAnimateNatively = false;
+        }
+      }
+      if (valueIsTransform && !supports.linearEasing() && (isFunction(easing) || isEasingList(easing) && easing.some(isFunction))) {
+        canAnimateNatively = false;
+      }
+      if (canAnimateNatively) {
+        if (definition) {
+          keyframes = keyframes.map((value) => isNumber(value) ? definition.toDefaultUnit(value) : value);
+        }
+        if (keyframes.length === 1 && (!supports.partialKeyframes() || isRecording)) {
+          keyframes.unshift(readInitialValue());
+        }
+        const animationOptions = {
+          delay: time.ms(delay),
+          duration: time.ms(duration),
+          endDelay: time.ms(endDelay),
+          easing: !isEasingList(easing) ? convertEasing(easing, duration) : void 0,
+          direction,
+          iterations: repeat + 1,
+          fill: "both"
+        };
+        animation = element.animate({
+          [name]: keyframes,
+          offset,
+          easing: isEasingList(easing) ? easing.map((thisEasing) => convertEasing(thisEasing, duration)) : void 0
+        }, animationOptions);
+        if (!animation.finished) {
+          animation.finished = new Promise((resolve, reject) => {
+            animation.onfinish = resolve;
+            animation.oncancel = reject;
+          });
+        }
+        const target = keyframes[keyframes.length - 1];
+        animation.finished.then(() => {
+          if (persist)
+            return;
+          style.set(element, name, target);
+          animation.cancel();
+        }).catch(noop);
+        if (!allowWebkitAcceleration)
+          animation.playbackRate = 1.000001;
+      } else if (AnimationPolyfill && valueIsTransform) {
+        keyframes = keyframes.map((value) => typeof value === "string" ? parseFloat(value) : value);
+        if (keyframes.length === 1) {
+          keyframes.unshift(parseFloat(readInitialValue()));
+        }
+        animation = new AnimationPolyfill((latest) => {
+          style.set(element, name, toUnit ? toUnit(latest) : latest);
+        }, keyframes, Object.assign(Object.assign({}, options), {
+          duration,
+          easing
+        }));
+      } else {
+        const target = keyframes[keyframes.length - 1];
+        style.set(element, name, definition && isNumber(target) ? definition.toDefaultUnit(target) : target);
+      }
+      if (isRecording) {
+        record(element, key, keyframes, {
+          duration,
+          delay,
+          easing,
+          repeat,
+          offset
+        }, "motion-one");
+      }
+      motionValue.setAnimation(animation);
+      if (animation && !autoplay)
+        animation.pause();
+      return animation;
+    };
+  }
+
+  // node_modules/@motionone/dom/dist/animate/utils/options.es.js
+  var getOptions = (options, key) => (
+    /**
+     * TODO: Make test for this
+     * Always return a new object otherwise delay is overwritten by results of stagger
+     * and this results in no stagger
+     */
+    options[key] ? Object.assign(Object.assign({}, options), options[key]) : Object.assign({}, options)
+  );
+
+  // node_modules/@motionone/dom/dist/utils/resolve-elements.es.js
+  function resolveElements(elements, selectorCache) {
+    var _a;
+    if (typeof elements === "string") {
+      if (selectorCache) {
+        (_a = selectorCache[elements]) !== null && _a !== void 0 ? _a : selectorCache[elements] = document.querySelectorAll(elements);
+        elements = selectorCache[elements];
+      } else {
+        elements = document.querySelectorAll(elements);
+      }
+    } else if (elements instanceof Element) {
+      elements = [elements];
+    }
+    return Array.from(elements || []);
+  }
+
+  // node_modules/@motionone/dom/dist/animate/utils/controls.es.js
+  var createAnimation = (factory) => factory();
+  var withControls = (animationFactory, options, duration = defaults.duration) => {
+    return new Proxy({
+      animations: animationFactory.map(createAnimation).filter(Boolean),
+      duration,
+      options
+    }, controls);
+  };
+  var getActiveAnimation = (state) => state.animations[0];
+  var controls = {
+    get: (target, key) => {
+      const activeAnimation = getActiveAnimation(target);
+      switch (key) {
+        case "duration":
+          return target.duration;
+        case "currentTime":
+          return time.s((activeAnimation === null || activeAnimation === void 0 ? void 0 : activeAnimation[key]) || 0);
+        case "playbackRate":
+        case "playState":
+          return activeAnimation === null || activeAnimation === void 0 ? void 0 : activeAnimation[key];
+        case "finished":
+          if (!target.finished) {
+            target.finished = Promise.all(target.animations.map(selectFinished)).catch(noop);
+          }
+          return target.finished;
+        case "stop":
+          return () => {
+            target.animations.forEach((animation) => stopAnimation(animation));
+          };
+        case "forEachNative":
+          return (callback) => {
+            target.animations.forEach((animation) => callback(animation, target));
+          };
+        default:
+          return typeof (activeAnimation === null || activeAnimation === void 0 ? void 0 : activeAnimation[key]) === "undefined" ? void 0 : () => target.animations.forEach((animation) => animation[key]());
+      }
+    },
+    set: (target, key, value) => {
+      switch (key) {
+        case "currentTime":
+          value = time.ms(value);
+        case "playbackRate":
+          for (let i = 0; i < target.animations.length; i++) {
+            target.animations[i][key] = value;
+          }
+          return true;
+      }
+      return false;
+    }
+  };
+  var selectFinished = (animation) => animation.finished;
+
+  // node_modules/@motionone/dom/dist/utils/stagger.es.js
+  function stagger(duration = 0.1, { start = 0, from = 0, easing } = {}) {
+    return (i, total) => {
+      const fromIndex = isNumber(from) ? from : getFromIndex(from, total);
+      const distance = Math.abs(fromIndex - i);
+      let delay = duration * distance;
+      if (easing) {
+        const maxDelay = total * duration;
+        const easingFunction = getEasingFunction(easing);
+        delay = easingFunction(delay / maxDelay) * maxDelay;
+      }
+      return start + delay;
+    };
+  }
+  function getFromIndex(from, total) {
+    if (from === "first") {
+      return 0;
+    } else {
+      const lastIndex = total - 1;
+      return from === "last" ? lastIndex : lastIndex / 2;
+    }
+  }
+  function resolveOption(option, i, total) {
+    return isFunction(option) ? option(i, total) : option;
+  }
+
+  // node_modules/@motionone/dom/dist/animate/create-animate.es.js
+  function createAnimate(AnimatePolyfill) {
+    return function animate3(elements, keyframes, options = {}) {
+      elements = resolveElements(elements);
+      const numElements = elements.length;
+      invariant(Boolean(numElements), "No valid element provided.");
+      invariant(Boolean(keyframes), "No keyframes defined.");
+      const animationFactories = [];
+      for (let i = 0; i < numElements; i++) {
+        const element = elements[i];
+        for (const key in keyframes) {
+          const valueOptions = getOptions(options, key);
+          valueOptions.delay = resolveOption(valueOptions.delay, i, numElements);
+          const animation = animateStyle(element, key, keyframes[key], valueOptions, AnimatePolyfill);
+          animationFactories.push(animation);
+        }
+      }
+      return withControls(
+        animationFactories,
+        options,
+        /**
+         * TODO:
+         * If easing is set to spring or glide, duration will be dynamically
+         * generated. Ideally we would dynamically generate this from
+         * animation.effect.getComputedTiming().duration but this isn't
+         * supported in iOS13 or our number polyfill. Perhaps it's possible
+         * to Proxy animations returned from animateStyle that has duration
+         * as a getter.
+         */
+        options.duration
+      );
+    };
+  }
+
+  // node_modules/@motionone/dom/dist/animate/index.es.js
+  var animate = createAnimate(Animation);
+
+  // node_modules/@motionone/dom/dist/gestures/in-view.es.js
+  var thresholds = {
+    any: 0,
+    all: 1
+  };
+  function inView(elementOrSelector, onStart, { root, margin: rootMargin, amount = "any" } = {}) {
+    if (typeof IntersectionObserver === "undefined") {
+      return () => {
+      };
+    }
+    const elements = resolveElements(elementOrSelector);
+    const activeIntersections = /* @__PURE__ */ new WeakMap();
+    const onIntersectionChange = (entries2) => {
+      entries2.forEach((entry) => {
+        const onEnd = activeIntersections.get(entry.target);
+        if (entry.isIntersecting === Boolean(onEnd))
+          return;
+        if (entry.isIntersecting) {
+          const newOnEnd = onStart(entry);
+          if (isFunction(newOnEnd)) {
+            activeIntersections.set(entry.target, newOnEnd);
+          } else {
+            observer.unobserve(entry.target);
+          }
+        } else if (onEnd) {
+          onEnd(entry);
+          activeIntersections.delete(entry.target);
+        }
+      });
+    };
+    const observer = new IntersectionObserver(onIntersectionChange, {
+      root,
+      rootMargin,
+      threshold: typeof amount === "number" ? amount : thresholds[amount]
+    });
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }
+
+  // node_modules/motion/dist/animate.es.js
+  function animateProgress(target, options = {}) {
+    return withControls([
+      () => {
+        const animation = new Animation(target, [0, 1], options);
+        animation.finished.catch(() => {
+        });
+        return animation;
+      }
+    ], options, options.duration);
+  }
+  function animate2(target, keyframesOrOptions, options) {
+    const factory = isFunction(target) ? animateProgress : animate;
+    return factory(target, keyframesOrOptions, options);
+  }
+
+  // node_modules/split-type/dist/index.js
+  (function() {
+    function append() {
+      var length = arguments.length;
+      for (var i = 0; i < length; i++) {
+        var node = i < 0 || arguments.length <= i ? void 0 : arguments[i];
+        if (node.nodeType === 1 || node.nodeType === 11)
+          this.appendChild(node);
+        else
+          this.appendChild(document.createTextNode(String(node)));
+      }
+    }
+    function replaceChildren() {
+      while (this.lastChild) {
+        this.removeChild(this.lastChild);
+      }
+      if (arguments.length)
+        this.append.apply(this, arguments);
+    }
+    function replaceWith() {
+      var parent = this.parentNode;
+      for (var _len = arguments.length, nodes = new Array(_len), _key = 0; _key < _len; _key++) {
+        nodes[_key] = arguments[_key];
+      }
+      var i = nodes.length;
+      if (!parent)
+        return;
+      if (!i)
+        parent.removeChild(this);
+      while (i--) {
+        var node = nodes[i];
+        if (typeof node !== "object") {
+          node = this.ownerDocument.createTextNode(node);
+        } else if (node.parentNode) {
+          node.parentNode.removeChild(node);
+        }
+        if (!i) {
+          parent.replaceChild(node, this);
+        } else {
+          parent.insertBefore(this.previousSibling, node);
+        }
+      }
+    }
+    if (typeof Element !== "undefined") {
+      if (!Element.prototype.append) {
+        Element.prototype.append = append;
+        DocumentFragment.prototype.append = append;
+      }
+      if (!Element.prototype.replaceChildren) {
+        Element.prototype.replaceChildren = replaceChildren;
+        DocumentFragment.prototype.replaceChildren = replaceChildren;
+      }
+      if (!Element.prototype.replaceWith) {
+        Element.prototype.replaceWith = replaceWith;
+        DocumentFragment.prototype.replaceWith = replaceWith;
+      }
+    }
+  })();
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+    return obj;
+  }
+  function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+      var symbols = Object.getOwnPropertySymbols(object);
+      if (enumerableOnly)
+        symbols = symbols.filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+      keys.push.apply(keys, symbols);
+    }
+    return keys;
+  }
+  function _objectSpread2(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i] != null ? arguments[i] : {};
+      if (i % 2) {
+        ownKeys(Object(source), true).forEach(function(key) {
+          _defineProperty(target, key, source[key]);
+        });
+      } else if (Object.getOwnPropertyDescriptors) {
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+      } else {
+        ownKeys(Object(source)).forEach(function(key) {
+          Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+      }
+    }
+    return target;
+  }
+  function _slicedToArray(arr, i) {
+    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+  }
+  function _toConsumableArray(arr) {
+    return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+  }
+  function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr))
+      return _arrayLikeToArray(arr);
+  }
+  function _arrayWithHoles(arr) {
+    if (Array.isArray(arr))
+      return arr;
+  }
+  function _iterableToArray(iter) {
+    if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter))
+      return Array.from(iter);
+  }
+  function _iterableToArrayLimit(arr, i) {
+    if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr)))
+      return;
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = void 0;
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+        if (i && _arr.length === i)
+          break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null)
+          _i["return"]();
+      } finally {
+        if (_d)
+          throw _e;
+      }
+    }
+    return _arr;
+  }
+  function _unsupportedIterableToArray(o, minLen) {
+    if (!o)
+      return;
+    if (typeof o === "string")
+      return _arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor)
+      n = o.constructor.name;
+    if (n === "Map" || n === "Set")
+      return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n))
+      return _arrayLikeToArray(o, minLen);
+  }
+  function _arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length)
+      len = arr.length;
+    for (var i = 0, arr2 = new Array(len); i < len; i++)
+      arr2[i] = arr[i];
+    return arr2;
+  }
+  function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+  function extend(target, object) {
+    return Object.getOwnPropertyNames(Object(target)).reduce(function(extended, key) {
+      var currentValue = Object.getOwnPropertyDescriptor(Object(target), key);
+      var newValue = Object.getOwnPropertyDescriptor(Object(object), key);
+      return Object.defineProperty(extended, key, newValue || currentValue);
+    }, {});
+  }
+  function isString2(value) {
+    return typeof value === "string";
+  }
+  function isArray(value) {
+    return Array.isArray(value);
+  }
+  function parseSettings() {
+    var settings = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {};
+    var object = extend(settings);
+    var types;
+    if (object.types !== void 0) {
+      types = object.types;
+    } else if (object.split !== void 0) {
+      types = object.split;
+    }
+    if (types !== void 0) {
+      object.types = (isString2(types) || isArray(types) ? String(types) : "").split(",").map(function(type) {
+        return String(type).trim();
+      }).filter(function(type) {
+        return /((line)|(word)|(char))/i.test(type);
+      });
+    }
+    if (object.absolute || object.position) {
+      object.absolute = object.absolute || /absolute/.test(settings.position);
+    }
+    return object;
+  }
+  function parseTypes(value) {
+    var types = isString2(value) || isArray(value) ? String(value) : "";
+    return {
+      none: !types,
+      lines: /line/i.test(types),
+      words: /word/i.test(types),
+      chars: /char/i.test(types)
+    };
+  }
+  function isObject(value) {
+    return value !== null && typeof value === "object";
+  }
+  function isNode(input) {
+    return isObject(input) && /^(1|3|11)$/.test(input.nodeType);
+  }
+  function isLength(value) {
+    return typeof value === "number" && value > -1 && value % 1 === 0;
+  }
+  function isArrayLike(value) {
+    return isObject(value) && isLength(value.length);
+  }
+  function toArray(value) {
+    if (isArray(value))
+      return value;
+    if (value == null)
+      return [];
+    return isArrayLike(value) ? Array.prototype.slice.call(value) : [value];
+  }
+  function getTargetElements(target) {
+    var elements = target;
+    if (isString2(target)) {
+      if (/^(#[a-z]\w+)$/.test(target.trim())) {
+        elements = document.getElementById(target.trim().slice(1));
+      } else {
+        elements = document.querySelectorAll(target);
+      }
+    }
+    return toArray(elements).reduce(function(result, element) {
+      return [].concat(_toConsumableArray(result), _toConsumableArray(toArray(element).filter(isNode)));
+    }, []);
+  }
+  var entries = Object.entries;
+  var expando = "_splittype";
+  var cache = {};
+  var uid = 0;
+  function set(owner, key, value) {
+    if (!isObject(owner)) {
+      console.warn("[data.set] owner is not an object");
+      return null;
+    }
+    var id = owner[expando] || (owner[expando] = ++uid);
+    var data2 = cache[id] || (cache[id] = {});
+    if (value === void 0) {
+      if (!!key && Object.getPrototypeOf(key) === Object.prototype) {
+        cache[id] = _objectSpread2(_objectSpread2({}, data2), key);
+      }
+    } else if (key !== void 0) {
+      data2[key] = value;
+    }
+    return value;
+  }
+  function get(owner, key) {
+    var id = isObject(owner) ? owner[expando] : null;
+    var data2 = id && cache[id] || {};
+    if (key === void 0) {
+      return data2;
+    }
+    return data2[key];
+  }
+  function remove(element) {
+    var id = element && element[expando];
+    if (id) {
+      delete element[id];
+      delete cache[id];
+    }
+  }
+  function clear() {
+    Object.keys(cache).forEach(function(key) {
+      delete cache[key];
+    });
+  }
+  function cleanup() {
+    entries(cache).forEach(function(_ref) {
+      var _ref2 = _slicedToArray(_ref, 2), id = _ref2[0], _ref2$ = _ref2[1], isRoot = _ref2$.isRoot, isSplit = _ref2$.isSplit;
+      if (!isRoot || !isSplit) {
+        cache[id] = null;
+        delete cache[id];
+      }
+    });
+  }
+  function toWords(value) {
+    var separator = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : " ";
+    var string = value ? String(value) : "";
+    return string.trim().replace(/\s+/g, " ").split(separator);
+  }
+  var rsAstralRange = "\\ud800-\\udfff";
+  var rsComboMarksRange = "\\u0300-\\u036f\\ufe20-\\ufe23";
+  var rsComboSymbolsRange = "\\u20d0-\\u20f0";
+  var rsVarRange = "\\ufe0e\\ufe0f";
+  var rsAstral = "[".concat(rsAstralRange, "]");
+  var rsCombo = "[".concat(rsComboMarksRange).concat(rsComboSymbolsRange, "]");
+  var rsFitz = "\\ud83c[\\udffb-\\udfff]";
+  var rsModifier = "(?:".concat(rsCombo, "|").concat(rsFitz, ")");
+  var rsNonAstral = "[^".concat(rsAstralRange, "]");
+  var rsRegional = "(?:\\ud83c[\\udde6-\\uddff]){2}";
+  var rsSurrPair = "[\\ud800-\\udbff][\\udc00-\\udfff]";
+  var rsZWJ = "\\u200d";
+  var reOptMod = "".concat(rsModifier, "?");
+  var rsOptVar = "[".concat(rsVarRange, "]?");
+  var rsOptJoin = "(?:" + rsZWJ + "(?:" + [rsNonAstral, rsRegional, rsSurrPair].join("|") + ")" + rsOptVar + reOptMod + ")*";
+  var rsSeq = rsOptVar + reOptMod + rsOptJoin;
+  var rsSymbol = "(?:".concat(["".concat(rsNonAstral).concat(rsCombo, "?"), rsCombo, rsRegional, rsSurrPair, rsAstral].join("|"), "\n)");
+  var reUnicode = RegExp("".concat(rsFitz, "(?=").concat(rsFitz, ")|").concat(rsSymbol).concat(rsSeq), "g");
+  var unicodeRange = [rsZWJ, rsAstralRange, rsComboMarksRange, rsComboSymbolsRange, rsVarRange];
+  var reHasUnicode = RegExp("[".concat(unicodeRange.join(""), "]"));
+  function asciiToArray(string) {
+    return string.split("");
+  }
+  function hasUnicode(string) {
+    return reHasUnicode.test(string);
+  }
+  function unicodeToArray(string) {
+    return string.match(reUnicode) || [];
+  }
+  function stringToArray(string) {
+    return hasUnicode(string) ? unicodeToArray(string) : asciiToArray(string);
+  }
+  function toString(value) {
+    return value == null ? "" : String(value);
+  }
+  function toChars(string) {
+    var separator = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : "";
+    string = toString(string);
+    if (string && isString2(string)) {
+      if (!separator && hasUnicode(string)) {
+        return stringToArray(string);
+      }
+    }
+    return string.split(separator);
+  }
+  function createElement(name, attributes) {
+    var element = document.createElement(name);
+    if (!attributes) {
+      return element;
+    }
+    Object.keys(attributes).forEach(function(attribute) {
+      var rawValue = attributes[attribute];
+      var value = isString2(rawValue) ? rawValue.trim() : rawValue;
+      if (value === null || value === "")
+        return;
+      if (attribute === "children") {
+        element.append.apply(element, _toConsumableArray(toArray(value)));
+      } else {
+        element.setAttribute(attribute, value);
+      }
+    });
+    return element;
+  }
+  var defaults2 = {
+    splitClass: "",
+    lineClass: "line",
+    wordClass: "word",
+    charClass: "char",
+    types: ["lines", "words", "chars"],
+    absolute: false,
+    tagName: "div"
+  };
+  function splitWordsAndChars(textNode, settings) {
+    settings = extend(defaults2, settings);
+    var types = parseTypes(settings.types);
+    var TAG_NAME = settings.tagName;
+    var VALUE = textNode.nodeValue;
+    var splitText = document.createDocumentFragment();
+    var words = [];
+    var chars = [];
+    if (/^\s/.test(VALUE)) {
+      splitText.append(" ");
+    }
+    words = toWords(VALUE).reduce(function(result, WORD, idx, arr) {
+      var wordElement;
+      var characterElementsForCurrentWord;
+      if (types.chars) {
+        characterElementsForCurrentWord = toChars(WORD).map(function(CHAR) {
+          var characterElement = createElement(TAG_NAME, {
+            "class": "".concat(settings.splitClass, " ").concat(settings.charClass),
+            style: "display: inline-block;",
+            children: CHAR
+          });
+          set(characterElement, "isChar", true);
+          chars = [].concat(_toConsumableArray(chars), [characterElement]);
+          return characterElement;
+        });
+      }
+      if (types.words || types.lines) {
+        wordElement = createElement(TAG_NAME, {
+          "class": "".concat(settings.wordClass, " ").concat(settings.splitClass),
+          style: "display: inline-block; ".concat(types.words && settings.absolute ? "position: relative;" : ""),
+          children: types.chars ? characterElementsForCurrentWord : WORD
+        });
+        set(wordElement, {
+          isWord: true,
+          isWordStart: true,
+          isWordEnd: true
+        });
+        splitText.appendChild(wordElement);
+      } else {
+        characterElementsForCurrentWord.forEach(function(characterElement) {
+          splitText.appendChild(characterElement);
+        });
+      }
+      if (idx < arr.length - 1) {
+        splitText.append(" ");
+      }
+      return types.words ? result.concat(wordElement) : result;
+    }, []);
+    if (/\s$/.test(VALUE)) {
+      splitText.append(" ");
+    }
+    textNode.replaceWith(splitText);
+    return {
+      words,
+      chars
+    };
+  }
+  function split(node, settings) {
+    var type = node.nodeType;
+    var wordsAndChars = {
+      words: [],
+      chars: []
+    };
+    if (!/(1|3|11)/.test(type)) {
+      return wordsAndChars;
+    }
+    if (type === 3 && /\S/.test(node.nodeValue)) {
+      return splitWordsAndChars(node, settings);
+    }
+    var childNodes = toArray(node.childNodes);
+    if (childNodes.length) {
+      set(node, "isSplit", true);
+      if (!get(node).isRoot) {
+        node.style.display = "inline-block";
+        node.style.position = "relative";
+        var nextSibling = node.nextSibling;
+        var prevSibling = node.previousSibling;
+        var text = node.textContent || "";
+        var textAfter = nextSibling ? nextSibling.textContent : " ";
+        var textBefore = prevSibling ? prevSibling.textContent : " ";
+        set(node, {
+          isWordEnd: /\s$/.test(text) || /^\s/.test(textAfter),
+          isWordStart: /^\s/.test(text) || /\s$/.test(textBefore)
+        });
+      }
+    }
+    return childNodes.reduce(function(result, child) {
+      var _split = split(child, settings), words = _split.words, chars = _split.chars;
+      return {
+        words: [].concat(_toConsumableArray(result.words), _toConsumableArray(words)),
+        chars: [].concat(_toConsumableArray(result.chars), _toConsumableArray(chars))
+      };
+    }, wordsAndChars);
+  }
+  function getPosition(node, isWord, settings, scrollPos) {
+    if (!settings.absolute) {
+      return {
+        top: isWord ? node.offsetTop : null
+      };
+    }
+    var parent = node.offsetParent;
+    var _scrollPos = _slicedToArray(scrollPos, 2), scrollX = _scrollPos[0], scrollY = _scrollPos[1];
+    var parentX = 0;
+    var parentY = 0;
+    if (parent && parent !== document.body) {
+      var parentRect = parent.getBoundingClientRect();
+      parentX = parentRect.x + scrollX;
+      parentY = parentRect.y + scrollY;
+    }
+    var _node$getBoundingClie = node.getBoundingClientRect(), width = _node$getBoundingClie.width, height = _node$getBoundingClie.height, x = _node$getBoundingClie.x, y = _node$getBoundingClie.y;
+    var top = y + scrollY - parentY;
+    var left = x + scrollX - parentX;
+    return {
+      width,
+      height,
+      top,
+      left
+    };
+  }
+  function unSplitWords(element) {
+    if (!get(element).isWord) {
+      toArray(element.children).forEach(function(child) {
+        return unSplitWords(child);
+      });
+    } else {
+      remove(element);
+      element.replaceWith.apply(element, _toConsumableArray(element.childNodes));
+    }
+  }
+  var createFragment = function createFragment2() {
+    return document.createDocumentFragment();
+  };
+  function repositionAfterSplit(element, settings, scrollPos) {
+    var types = parseTypes(settings.types);
+    var TAG_NAME = settings.tagName;
+    var nodes = element.getElementsByTagName("*");
+    var wordsInEachLine = [];
+    var wordsInCurrentLine = [];
+    var lineOffsetY = null;
+    var elementHeight;
+    var elementWidth;
+    var contentBox;
+    var lines = [];
+    var parent = element.parentElement;
+    var nextSibling = element.nextElementSibling;
+    var splitText = createFragment();
+    var cs = window.getComputedStyle(element);
+    var align = cs.textAlign;
+    var fontSize = parseFloat(cs.fontSize);
+    var lineThreshold = fontSize * 0.2;
+    if (settings.absolute) {
+      contentBox = {
+        left: element.offsetLeft,
+        top: element.offsetTop,
+        width: element.offsetWidth
+      };
+      elementWidth = element.offsetWidth;
+      elementHeight = element.offsetHeight;
+      set(element, {
+        cssWidth: element.style.width,
+        cssHeight: element.style.height
+      });
+    }
+    toArray(nodes).forEach(function(node) {
+      var isWordLike = node.parentElement === element;
+      var _getPosition = getPosition(node, isWordLike, settings, scrollPos), width = _getPosition.width, height = _getPosition.height, top = _getPosition.top, left = _getPosition.left;
+      if (/^br$/i.test(node.nodeName))
+        return;
+      if (types.lines && isWordLike) {
+        if (lineOffsetY === null || top - lineOffsetY >= lineThreshold) {
+          lineOffsetY = top;
+          wordsInEachLine.push(wordsInCurrentLine = []);
+        }
+        wordsInCurrentLine.push(node);
+      }
+      if (settings.absolute) {
+        set(node, {
+          top,
+          left,
+          width,
+          height
+        });
+      }
+    });
+    if (parent) {
+      parent.removeChild(element);
+    }
+    if (types.lines) {
+      lines = wordsInEachLine.map(function(wordsInThisLine) {
+        var lineElement = createElement(TAG_NAME, {
+          "class": "".concat(settings.splitClass, " ").concat(settings.lineClass),
+          style: "display: block; text-align: ".concat(align, "; width: 100%;")
+        });
+        set(lineElement, "isLine", true);
+        var lineDimensions = {
+          height: 0,
+          top: 1e4
+        };
+        splitText.appendChild(lineElement);
+        wordsInThisLine.forEach(function(wordOrElement, idx, arr) {
+          var _data$get = get(wordOrElement), isWordEnd = _data$get.isWordEnd, top = _data$get.top, height = _data$get.height;
+          var next = arr[idx + 1];
+          lineDimensions.height = Math.max(lineDimensions.height, height);
+          lineDimensions.top = Math.min(lineDimensions.top, top);
+          lineElement.appendChild(wordOrElement);
+          if (isWordEnd && get(next).isWordStart) {
+            lineElement.append(" ");
+          }
+        });
+        if (settings.absolute) {
+          set(lineElement, {
+            height: lineDimensions.height,
+            top: lineDimensions.top
+          });
+        }
+        return lineElement;
+      });
+      if (!types.words) {
+        unSplitWords(splitText);
+      }
+      element.replaceChildren(splitText);
+    }
+    if (settings.absolute) {
+      element.style.width = "".concat(element.style.width || elementWidth, "px");
+      element.style.height = "".concat(elementHeight, "px");
+      toArray(nodes).forEach(function(node) {
+        var _data$get2 = get(node), isLine = _data$get2.isLine, top = _data$get2.top, left = _data$get2.left, width = _data$get2.width, height = _data$get2.height;
+        var parentData = get(node.parentElement);
+        var isChildOfLineNode = !isLine && parentData.isLine;
+        node.style.top = "".concat(isChildOfLineNode ? top - parentData.top : top, "px");
+        node.style.left = isLine ? "".concat(contentBox.left, "px") : "".concat(left - (isChildOfLineNode ? contentBox.left : 0), "px");
+        node.style.height = "".concat(height, "px");
+        node.style.width = isLine ? "".concat(contentBox.width, "px") : "".concat(width, "px");
+        node.style.position = "absolute";
+      });
+    }
+    if (parent) {
+      if (nextSibling)
+        parent.insertBefore(element, nextSibling);
+      else
+        parent.appendChild(element);
+    }
+    return lines;
+  }
+  var _defaults = extend(defaults2, {});
+  var SplitType = /* @__PURE__ */ function() {
+    _createClass(SplitType2, null, [{
+      key: "clearData",
+      /**
+       * CLears all data
+       */
+      value: function clearData() {
+        clear();
+      }
+      /**
+       * The default settings for all splitType instances
+       * @static
+       */
+    }, {
+      key: "setDefaults",
+      /**
+       * Sets the default settings for all SplitType instances.
+       * The provided object will be merged with the existing defaults objects.
+       *
+       * @param {Object} settings an object containing the settings to override
+       * @returns {Object} the new default settings
+       * @public
+       * @static
+       * @example
+       * SplitType.setDefaults({ "position": "absolute" })
+       */
+      value: function setDefaults(options) {
+        _defaults = extend(_defaults, parseSettings(options));
+        return defaults2;
+      }
+      /**
+       * Revert target elements to their original html content
+       * Has no effect on that
+       *
+       * @param {any} elements The target elements to revert. One of:
+       *  - {string} A css selector
+       *  - {HTMLElement} A single element
+       * -  {NodeList} A NodeList or collection
+       *  - {HTMLElement[]} An array of Elements
+       * -  {Array<HTMLElement|NodeList|HTMLElement[]>} A nested array of elements
+       * @static
+       */
+    }, {
+      key: "revert",
+      value: function revert(elements) {
+        getTargetElements(elements).forEach(function(element) {
+          var _data$get = get(element), isSplit = _data$get.isSplit, html = _data$get.html, cssWidth = _data$get.cssWidth, cssHeight = _data$get.cssHeight;
+          if (isSplit) {
+            element.innerHTML = html;
+            element.style.width = cssWidth || "";
+            element.style.height = cssHeight || "";
+            remove(element);
+          }
+        });
+      }
+      /**
+       * Creates a new SplitType instance
+       * This static method provides a way to create a `SplitType` instance without
+       * using the `new` keyword.
+       *
+       * @param {any} target The target elements to split. One of:
+       *  - {string} A css selector
+       *  - {HTMLElement} A single element
+       * -  {NodeList} A NodeList or collection
+       *  - {HTMLElement[]} An array of Elements
+       * -  {Array<HTMLElement|NodeList|HTMLElement[]>} A nested array of elements
+       * @param {Object} [options] Settings for the SplitType instance
+       * @return {SplitType} the SplitType instance
+       * @static
+       */
+    }, {
+      key: "create",
+      value: function create(target, options) {
+        return new SplitType2(target, options);
+      }
+      /**
+       * Creates a new `SplitType` instance
+       *
+       * @param {any} elements The target elements to split. One of:
+       *  - {string} A css selector
+       *  - {HTMLElement} A single element
+       * -  {NodeList} A NodeList or collection
+       *  - {HTMLElement[]} An array of Elements
+       * -  {Array<HTMLElement|NodeList|HTMLElement[]>} A nested array of elements
+       * @param {Object} [options] Settings for the SplitType instance
+       */
+    }, {
+      key: "data",
+      /**
+       * The internal data store
+       */
+      get: function get2() {
+        return cache;
+      }
+    }, {
+      key: "defaults",
+      get: function get2() {
+        return _defaults;
+      },
+      set: function set2(options) {
+        _defaults = extend(_defaults, parseSettings(options));
+      }
+    }]);
+    function SplitType2(elements, options) {
+      _classCallCheck(this, SplitType2);
+      this.isSplit = false;
+      this.settings = extend(_defaults, parseSettings(options));
+      this.elements = getTargetElements(elements);
+      this.split();
+    }
+    _createClass(SplitType2, [{
+      key: "split",
+      value: function split$1(options) {
+        var _this = this;
+        this.revert();
+        this.elements.forEach(function(element) {
+          set(element, "html", element.innerHTML);
+        });
+        this.lines = [];
+        this.words = [];
+        this.chars = [];
+        var scrollPos = [window.pageXOffset, window.pageYOffset];
+        if (options !== void 0) {
+          this.settings = extend(this.settings, parseSettings(options));
+        }
+        var types = parseTypes(this.settings.types);
+        if (types.none) {
+          return;
+        }
+        this.elements.forEach(function(element) {
+          set(element, "isRoot", true);
+          var _split2 = split(element, _this.settings), words = _split2.words, chars = _split2.chars;
+          _this.words = [].concat(_toConsumableArray(_this.words), _toConsumableArray(words));
+          _this.chars = [].concat(_toConsumableArray(_this.chars), _toConsumableArray(chars));
+        });
+        this.elements.forEach(function(element) {
+          if (types.lines || _this.settings.absolute) {
+            var lines = repositionAfterSplit(element, _this.settings, scrollPos);
+            _this.lines = [].concat(_toConsumableArray(_this.lines), _toConsumableArray(lines));
+          }
+        });
+        this.isSplit = true;
+        window.scrollTo(scrollPos[0], scrollPos[1]);
+        cleanup();
+      }
+      /**
+       * Reverts target element(s) back to their original html content
+       * Deletes all stored data associated with the target elements
+       * Resets the properties on the splitType instance
+       *
+       * @public
+       */
+    }, {
+      key: "revert",
+      value: function revert() {
+        if (this.isSplit) {
+          this.lines = null;
+          this.words = null;
+          this.chars = null;
+          this.isSplit = false;
+        }
+        SplitType2.revert(this.elements);
+      }
+    }]);
+    return SplitType2;
+  }();
+
+  // index.js
+  var animateText = (selector, delay = 0.1, duration = 0.6) => {
+    const text = new SplitType(selector);
+    text.lines.forEach((line) => {
+      line.style.clipPath = "inset(0 100% 0 0)";
+      line.style.transition = "clip-path 0.3s ease-out";
+      setTimeout(() => {
+        line.style.clipPath = "inset(0 0 -20% 0)";
+      }, delay * 100);
+    });
+    text.words.forEach((word) => {
+      word.style.transform = "translateY(100%)";
+    });
+    text.words.forEach((word, index) => {
+      animate2(word, { opacity: [0, 1], translateY: ["100%", "0%"] }, { delay: delay + index * delay, ease: [0.25, 1, 0.5, 1], duration });
+    });
+  };
+  if (window.innerWidth > 991) {
+    const achievementBLock = document.querySelectorAll(".achievement-tile");
+    achievementBLock.forEach((block, index) => {
+      block.style.opacity = 0;
+    });
+    inView(".div-block-9", (_) => {
+      animate2(".achievement-tile", { opacity: [1], y: [40, 0] }, { delay: stagger(0.3), duration: 1 });
+    });
+    inView(".main-block", (_) => {
+      animateText(".main-title-animation");
+    });
+    inView(".about-company-block", (_) => {
+      animateText(".title-about-company");
+    });
+    const blocks = document.querySelectorAll(".text-block-4");
+    blocks.forEach((block) => {
+      inView(block, (_) => {
+        animateText(block);
+      });
+    });
+    inView(".team-block", (_) => {
+      animateText(".team-block-title");
+    });
+    inView(".contact-block", (_) => {
+      animateText(".contact-title");
+    });
+    const items = document.querySelectorAll(".service-card-cms ");
+    let columns = window.innerWidth > 1279 ? 3 : 2;
+    const delayPerItem = 0.2;
+    const row = Math.ceil(items.length / columns);
+    const rows = new Array(row).fill().map(() => []);
+    items.forEach((item, index) => {
+      item.style.opacity = 0;
+      const currentRow = index % row;
+      rows[currentRow].push({ item });
+    });
+    rows.forEach((currentRow) => {
+      inView(currentRow[0].item, (_) => {
+        currentRow.forEach((element, indexRow) => {
+          animate2(element.item, { opacity: [1], y: [40, 0] }, { delay: delayPerItem * indexRow, duration: 0.5 });
+        });
+      });
+    });
+  }
+})();

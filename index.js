@@ -34,26 +34,26 @@ import SplitType from 'split-type';
 //         },
 //     ]);
 // });
-
-
-
 const animateText = (selector, delay = 0.1, duration = 0.6) => {
     const text = new SplitType(selector);
+    // Предварительно устанавливаем clip-path для всех строк.
     text.lines.forEach((line) => {
-        line.style.clipPath = "inset(0 0 0 0)";
+        line.style.clipPath = "inset(0 100% 0 0)"; // Начальное состояние анимации
         line.style.transition = 'clip-path 0.3s ease-out';
-
+        // Запускаем анимацию clip-path для всех строк одновременно с анимацией слов.
+        setTimeout(() => {
+            line.style.clipPath = 'inset(0 0 -20% 0)';
+        }, delay * 100); // Вы можете настроить задержку, чтобы синхронизировать с анимацией слов.
     });
+
     text.words.forEach((word) => {
         word.style.transform = "translateY(100%)";
     });
     text.words.forEach((word, index) => {
-        animate( word, { opacity: [0, 1] , translateY: ["100%", "0%"] }, { delay: delay + index * delay, ease: [.25, 1, .5 ,1], duration}).finished.then(() => {
-            const parentLine = word.closest('.line');
-            parentLine.style.clipPath = 'inset(0 0 -20% 0)';
-        });
+        animate(word, { opacity: [0, 1], translateY: ["100%", "0%"] }, { delay: delay + index * delay, ease: [.25, 1, .5, 1], duration});
     });
 };
+
 
 
 if (window.innerWidth > 991) {

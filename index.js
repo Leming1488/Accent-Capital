@@ -1,39 +1,98 @@
 import { animate, inView, stagger } from "motion";
 import SplitType from 'split-type';
+import Swiper from 'swiper';
+// import Swiper styles
+import 'swiper/css';
 
-// window.addEventListener('load', function () {
-//     window.fsAttributes = window.fsAttributes || [];
-//     window.fsAttributes.push([
-//         'cmsnest',
-//         (listInstances) => {
 
-//   const dropdowns = document.querySelectorAll('.dropdown');
-//   dropdowns.forEach(dropdown => {
-//     let isOpen = false; // Состояние открытости аккордеона
-//     const textBlock = dropdown.closest('.collection-item-4').querySelector('.text-block-13');
-//     const vectorsWrapper = dropdown.querySelector('.vectors-wrapper-5');
-//       textBlock.style.maxHeight = '0';
-//       textBlock.style.overflow = 'hidden';
-//       textBlock.style.transition = 'max-height 0.3s ease-out';
-//       dropdown.style.cursor = 'pointer';
 
-//       dropdown.addEventListener('click', function () {
-//         if (!isOpen) {
-//             textBlock.style.maxHeight = textBlock.scrollHeight + 'px';
-//             vectorsWrapper.style.transform = 'rotate(180deg)';
-//             isOpen = true;
-//         } else {
-//             textBlock.style.maxHeight = '0';
-//             vectorsWrapper.style.transform = 'rotate(0deg)';
-//             isOpen = false;
-//         }
-//         });
-
+// document.querySelectorAll('[modal="services"]').forEach(function(button) {
+//   button.addEventListener('click', function() {
+//     var modal = document.querySelector('.modal-services');
+//     // Использование Motion JS для анимации открытия
+//     animate(modal, {
+//       opacity: [0, 1],
+//       transform: ['translateY(100%)', 'translateY(0)']
+//     }, {
+//       duration: 0.4, // продолжительность анимации в секундах
+//       easing: 'ease-out' // тип смягчения анимации
+//     });
+//     modal.style.display = 'flex'; // Установка display до начала анимации
 //   });
-
-//         },
-//     ]);
 // });
+
+// document.querySelectorAll('[modal="support"]').forEach(function(button) {
+//   button.addEventListener('click', function() {
+//       var modal = document.querySelector('.modal-support');
+//     // Использование Motion JS для анимации открытия
+//     animate(modal, {
+//       opacity: [0, 1],
+//       transform: ['translateY(100%)', 'translateY(0)']
+//     }, {
+//       duration: 0.4, // продолжительность анимации в секундах
+//       easing: 'ease-out' // тип смягчения анимации
+//     });
+//     modal.style.display = 'flex'; // Установка display до начала анимации
+//   });
+// });
+
+// document.querySelector('.modal-support-close').addEventListener('click', function() {
+//     var modal = document.querySelector('.modal-support');
+//   // Использование Motion JS для анимации закрытия
+//   animate(modal, {
+//     opacity: [1, 0],
+//     transform: ['translateY(0)', 'translateY(100%)']
+//   }, {
+//     duration: 0.4, // продолжительность анимации в секундах
+//     easing: 'ease-in' // тип смягчения анимации
+//   }).then(function() {
+//     modal.style.display = 'none'; // Скрытие модального окна после окончания анимации
+//   });
+// });
+
+document.querySelector('.modal-services-close').addEventListener('click', function() {
+  var modal = document.querySelector('.modal-services');
+  // Использование Motion JS для анимации закрытия
+  animate(modal, {
+    opacity: [1, 0],
+    transform: ['translateY(0)', 'translateY(100%)']
+  }, {
+    duration: 0.4, // продолжительность анимации в секундах
+    easing: 'ease-in' // тип смягчения анимации
+  }).then(function() {
+    modal.style.display = 'none'; // Скрытие модального окна после окончания анимации
+  });
+});
+
+
+const swiper = new Swiper(".swiper-default", {
+    // Optional parameters
+    slidesPerView: "auto", // или числовое значение меньше, чем кол-во слайдов
+    centeredSlides: false,
+    spaceBetween: 18,
+    freeMode: true,
+    direction: "horizontal",
+    loop: true,
+    grabCursor: true,
+    breakpoints: {
+        1440: {
+            slidesPerView: 3,
+        },
+    },
+});
+
+const swiper21 = new Swiper(".team-slider", {
+    slidesPerView: "auto", // или числовое значение меньше, чем кол-во слайдов
+    centeredSlides: false,
+    spaceBetween: 18,
+    freeMode: true,
+    direction: "horizontal",
+    loop: true,
+    grabCursor: true,
+
+});
+
+
 const animateText = (selector, delay = 0.1, duration = 0.6) => {
     const text = new SplitType(selector);
     // Предварительно устанавливаем clip-path для всех строк.
@@ -53,7 +112,6 @@ const animateText = (selector, delay = 0.1, duration = 0.6) => {
         animate(word, { opacity: [0, 1], translateY: ["100%", "0%"] }, { delay: delay + index * delay, ease: [.25, 1, .5, 1], duration});
     });
 };
-
 
 
 if (window.innerWidth > 991) {
@@ -117,5 +175,58 @@ if (window.innerWidth > 991) {
 }
 
 
+window.addEventListener('load', function () {
+    window.fsAttributes = window.fsAttributes || [];
+    window.fsAttributes.push([
+        'cmsnest',
+        (listInstances) => {
 
+            document.querySelectorAll('.service-submit-button').forEach(function(button) {
+  button.addEventListener('click', function() {
+    var modal = document.querySelector('.modal-services');
+    // Использование Motion JS для анимации открытия
+    animate(modal, {
+      opacity: [0, 1],
+      transform: ['translateY(100%)', 'translateY(0)']
+    }, {
+      duration: 0.4, // продолжительность анимации в секундах
+      easing: 'ease-out' // тип смягчения анимации
+    });
+    modal.style.display = 'flex'; // Установка display до начала анимации
+  });
+});
+
+  const dropdowns = document.querySelectorAll('[card-dropdown]');
+  dropdowns.forEach(dropdown => {
+    let isOpen = false; // Состояние открытости аккордеона
+    const textBlock = dropdown.closest('[service-card]').querySelector('[card-text]');
+    const vectorsWrapper = dropdown.querySelector('.vectors-wrapper-5');
+ // Проверяем, есть ли текст в textBlock
+                if (!textBlock.textContent.trim()) {
+                    // Если текста нет, скрываем dropdown
+                    dropdown.style.display = 'none';
+                    return;
+                } 
+      textBlock.style.maxHeight = '0';
+      textBlock.style.overflow = 'hidden';
+      textBlock.style.transition = 'max-height 0.3s ease-out';
+      dropdown.style.cursor = 'pointer';
+
+      dropdown.addEventListener('click', function () {
+        if (!isOpen) {
+            textBlock.style.maxHeight = textBlock.scrollHeight + 'px';
+            vectorsWrapper.style.transform = 'rotate(180deg)';
+            isOpen = true;
+        } else {
+            textBlock.style.maxHeight = '0';
+            vectorsWrapper.style.transform = 'rotate(0deg)';
+            isOpen = false;
+        }
+        });
+
+  });
+
+        },
+    ]);
+});
 

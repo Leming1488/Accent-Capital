@@ -6021,6 +6021,31 @@
             modal.style.display = "flex";
           });
         });
+        function setupAnimations(wrapperSelector, itemSelector) {
+          document.querySelector(wrapperSelector).querySelectorAll(itemSelector).forEach(function(list) {
+            const serviceCards = list.querySelectorAll(".service_info_3");
+            let columns = 2;
+            const delayPerItem = 0.2;
+            const row = Math.ceil(serviceCards.length / columns);
+            const rows = new Array(row).fill().map(() => []);
+            serviceCards.forEach((item, index) => {
+              item.style.opacity = 0;
+              const currentRow = index % row;
+              rows[currentRow].push({ item });
+            });
+            rows.forEach((currentRow) => {
+              if (currentRow.length > 0 && currentRow[0].item) {
+                inView(currentRow[0].item, (_) => {
+                  currentRow.forEach((element, indexRow) => {
+                    animate2(element.item, { opacity: [1], y: [40, 0] }, { delay: delayPerItem * indexRow, duration: 0.5 });
+                  });
+                });
+              }
+            });
+          });
+        }
+        setupAnimations(".main-wrapper", ".collection-list-7");
+        setupAnimations(".main-wrapper", ".collection-item-3");
         const dropdowns = document.querySelectorAll("[card-dropdown]");
         dropdowns.forEach((dropdown) => {
           let isOpen = false;

@@ -201,20 +201,50 @@ window.addEventListener('load', function () {
         'cmsnest',
         (listInstances) => {
 
-  document.querySelectorAll('.service-submit-button').forEach(function(button) {
-  button.addEventListener('click', function() {
-    var modal = document.querySelector('.modal-services');
-    // Использование Motion JS для анимации открытия
-    animate(modal, {
-      opacity: [0, 1],
-      transform: ['translateY(100%)', 'translateY(0)']
-    }, {
-      duration: 0.4, // продолжительность анимации в секундах
-      easing: 'ease-out' // тип смягчения анимации
+    document.querySelectorAll('.service-submit-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            var modal = document.querySelector('.modal-services');
+            // Использование Motion JS для анимации открытия
+            animate(modal, {
+                opacity: [0, 1],
+                transform: ['translateY(100%)', 'translateY(0)']
+            }, {
+                duration: 0.4, // продолжительность анимации в секундах
+                easing: 'ease-out' // тип смягчения анимации
+            });
+            modal.style.display = 'flex'; // Установка display до начала анимации
+        });
     });
-    modal.style.display = 'flex'; // Установка display до начала анимации
-  });
-});
+
+function setupAnimations(wrapperSelector, itemSelector) {
+    document.querySelector(wrapperSelector).querySelectorAll(itemSelector).forEach(function(list) {
+        const serviceCards = list.querySelectorAll('.service_info_3');
+        let columns = 2; // 3 колонки для широких экранов, 2 для узких
+        const delayPerItem = 0.2; // Задержка между анимациями
+        const row = Math.ceil(serviceCards.length / columns);
+        const rows = new Array(row).fill().map(() => []);
+
+        serviceCards.forEach((item, index) => {
+            item.style.opacity = 0; // Устанавливаем начальное значение прозрачности
+            const currentRow = index % row;
+            rows[currentRow].push({ item }); // Добавляем элемент в соответствующую строку
+        });
+
+        rows.forEach((currentRow) => {
+            if (currentRow.length > 0 && currentRow[0].item) {
+                inView(currentRow[0].item, (_) => {
+                    currentRow.forEach((element, indexRow) => {
+                        animate(element.item, { opacity: [1], y: [40, 0] }, { delay: delayPerItem * indexRow, duration: 0.5 });
+                    });
+                });
+            }
+        });
+    });
+}
+
+// Вызов функции для разных коллекций
+setupAnimations('.main-wrapper', '.collection-list-7');
+setupAnimations('.main-wrapper', '.collection-item-3');
 
   const dropdowns = document.querySelectorAll('[card-dropdown]');
   dropdowns.forEach(dropdown => {
@@ -248,3 +278,54 @@ window.addEventListener('load', function () {
     ]);
 });
 
+// document.addEventListener('DOMContentLoaded', function() {
+
+// const callback = function(entries, observer) {
+//     entries.forEach(entry => {
+//         if (entry.isIntersecting) {
+//             console.log('Элемент вошел в область видимости:', entry.target);
+//             // Здесь можно добавить анимацию или любые другие действия
+//             entry.target.classList.add('in-view'); // Пример добавления класса для анимации
+//         } else {
+//             console.log('Элемент вышел из области видимости:', entry.target);
+//             entry.target.classList.remove('in-view'); // Удаление класса при выходе из области видимости
+//         }
+//     });
+// };
+
+// // Опции конфигурации наблюдателя
+// const options = {
+//     root: null, // null означает, что будет использоваться вьюпорт
+//     rootMargin: '0px', // Можно задать отступы от границ вьюпорта
+//     threshold: 0 // 10% элемента должно быть видно, чтобы сработало событие
+// };
+
+// // Создаем экземпляр IntersectionObserver
+// const observer = new IntersectionObserver(callback, options);
+
+
+// // Функция для отключения наблюдения, если это необходимо
+// function disconnectObserver() {
+//     observer.disconnect();
+//     console.log('Наблюдение за входом в область видимости прекращено.');
+// }
+
+
+//     const serviceCards = document.querySelector('.main-wrapper').querySelectorAll('.service_info_3');
+//     let columns = 2; // 3 колонки для широких экранов, 2 для узких
+//     const delayPerItem = 0.2; // Задержка между анимациями
+//     const row = Math.ceil(serviceCards.length / columns);
+//     const rows = new Array(row).fill().map(() => []);
+
+
+//     serviceCards.forEach((item, index) => {
+//         // item.style.opacity = 0; // Устанавливаем начальное значение прозрачности
+//         const currentRow = index % row;
+//         rows[currentRow].push({item}); // Добавляем элемент в соответствующую строку
+//     });
+
+
+//             rows.forEach((currentRow) => {
+//                 observer.observe(currentRow[0].item);
+//     })
+// })

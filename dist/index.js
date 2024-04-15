@@ -5845,8 +5845,19 @@
   Swiper.use([Resize, Observer]);
 
   // index.js
-  document.querySelector(".modal-services-close").addEventListener("click", function() {
-    var modal = document.querySelector(".modal-services");
+  var modalAnimation = (modal) => {
+    animate2(modal, {
+      opacity: [0, 1],
+      transform: ["translateY(100%)", "translateY(0)"]
+    }, {
+      duration: 0.4,
+      // продолжительность анимации в секундах
+      easing: "ease-out"
+      // тип смягчения анимации
+    });
+    modal.style.display = "flex";
+  };
+  var modalCloseAnimation = (modal) => {
     animate2(modal, {
       opacity: [1, 0],
       transform: ["translateY(0)", "translateY(100%)"]
@@ -5855,10 +5866,54 @@
       // продолжительность анимации в секундах
       easing: "ease-in"
       // тип смягчения анимации
-    }).then(function() {
+    }).finished.then(() => {
       modal.style.display = "none";
     });
-  });
+  };
+  var modalServices = document.querySelectorAll('[modal="services"]');
+  if (modalServices.length) {
+    const modal = document.querySelector(".modal-services");
+    const modalBg = document.querySelector(".modal-bg");
+    modal.addEventListener("click", function(event) {
+      if (event.target === modalBg || event.target === modal) {
+        modalCloseAnimation(modal);
+      }
+    });
+    modalServices.forEach(function(button) {
+      button.addEventListener("click", function() {
+        modalAnimation(modal);
+      });
+    });
+  }
+  var modalSupport = document.querySelectorAll('[modal="support"]');
+  if (modalSupport.length) {
+    const modal = document.querySelector(".modal-support");
+    const modalBg = document.querySelector(".modal-bg");
+    modal.addEventListener("click", function(event) {
+      if (event.target === modalBg || event.target === modal) {
+        modalCloseAnimation(modal);
+      }
+    });
+    modalSupport.forEach(function(button) {
+      button.addEventListener("click", function() {
+        modalAnimation(modal);
+      });
+    });
+  }
+  var modalSupportCloseButton = document.querySelector(".modal-support-close");
+  if (modalSupportCloseButton) {
+    modalSupportCloseButton.addEventListener("click", function() {
+      var modal = document.querySelector(".modal-support");
+      modalCloseAnimation(modal);
+    });
+  }
+  var modalServicesCloseButton = document.querySelector(".modal-services-close");
+  if (modalServicesCloseButton) {
+    modalServicesCloseButton.addEventListener("click", function() {
+      var modal = document.querySelector(".modal-services");
+      modalCloseAnimation(modal);
+    });
+  }
   var swiper = new Swiper(".swiper-default", {
     // Optional parameters
     slidesPerView: "auto",
@@ -5886,7 +5941,7 @@
     grabCursor: true
   });
   var animateText = (selector, delay = 0.1, duration = 0.6) => {
-    const text = new SplitType(selector);
+    const text = new SplitType(Selector);
     text.lines.forEach((line) => {
       line.style.clipPath = "inset(0 100% 0 0)";
       line.style.transition = "clip-path 0.3s ease-out";

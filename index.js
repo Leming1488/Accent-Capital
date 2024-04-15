@@ -83,36 +83,38 @@ modalServicesCloseButton.addEventListener('click', function() {
 });
 };
 
-const swiper = new Swiper(".swiper-default", {
-    // Optional parameters
-    slidesPerView: "auto", // или числовое значение меньше, чем кол-во слайдов
-    centeredSlides: false,
-    spaceBetween: 18,
-    freeMode: true,
-    direction: "horizontal",
-    loop: true,
-    grabCursor: true,
-    breakpoints: {
-        1440: {
-            slidesPerView: 3,
+// Инициализация Swiper слайдеров
+if (document.querySelector(".swiper-default")) {
+    const swiper = new Swiper(".swiper-default", {
+        slidesPerView: "auto",
+        centeredSlides: false,
+        spaceBetween: 18,
+        freeMode: true,
+        direction: "horizontal",
+        loop: true,
+        grabCursor: true,
+        breakpoints: {
+            1440: {
+                slidesPerView: 3,
+            },
         },
-    },
-});
+    });
+}
 
-const swiper21 = new Swiper(".team-slider", {
-    slidesPerView: "auto", // или числовое значение меньше, чем кол-во слайдов
-    centeredSlides: false,
-    spaceBetween: 18,
-    freeMode: true,
-    direction: "horizontal",
-    loop: true,
-    grabCursor: true,
-
-});
-
+if (document.querySelector(".team-slider")) {
+    const swiper21 = new Swiper(".team-slider", {
+        slidesPerView: "auto",
+        centeredSlides: false,
+        spaceBetween: 18,
+        freeMode: true,
+        direction: "horizontal",
+        loop: true,
+        grabCursor: true,
+    });
+}
 
 const animateText = (selector, delay = 0.1, duration = 0.6) => {
-    const text = new SplitType(Selector);
+    const text = new SplitType(selector);
     // Предварительно устанавливаем clip-path для всех строк.
     text.lines.forEach((line) => {
         line.style.clipPath = "inset(0 100% 0 0)"; // Начальное состояние анимации

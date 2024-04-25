@@ -5,6 +5,13 @@ import 'swiper/css';
 
 
 const modalAnimation = (modal) => {
+    const modalBg = modal.querySelector('.modal-bg');
+    // Анимируем фон
+    animate(modalBg, { opacity: [0, 0.8], filter: ['blur(0px)', 'blur(1px)'] }, {
+        delay: 0.4,
+        duration: 0.2,
+        easing: 'ease-out'
+    });
     animate(modal, {
         opacity: [0, 1],
         transform: ['translateY(100%)', 'translateY(0)']
@@ -16,7 +23,15 @@ const modalAnimation = (modal) => {
 };
 
 const modalCloseAnimation = (modal) => {
+    const modalBg = modal.querySelector('.modal-bg');
+    animate(modalBg, { opacity: [0.8, 0], filter: ['blur(1px)', 'blur(0px)'] }, {
+        duration: 0.2,
+        easing: 'ease-out',
+        onComplete: () => backdrop.style.display = 'none'
+    });
+
   animate(modal, {
+    delay: 0.2,
     opacity: [1, 0],
     transform: ['translateY(0)', 'translateY(100%)']
   }, {
@@ -28,39 +43,36 @@ const modalCloseAnimation = (modal) => {
 };
 
 const modalServices = document.querySelectorAll('[modal="services"]');
+const modalServicesWindow = document.querySelector('.modal-services');
 
-
-if(modalServices.length) {
-
-    const modal = document.querySelector('.modal-services');
+if(modalServices.length && modalServicesWindow) {
     const modalBg = document.querySelector('.modal-bg');
-    modal.addEventListener('click', function(event) {
-        if (event.target === modalBg || event.target === modal) {
-            modalCloseAnimation(modal);
+    modalServicesWindow.addEventListener('click', function(event) {
+        if (event.target === modalBg || event.target === modalServicesWindow) {
+            modalCloseAnimation(modalServicesWindow);
         }
     });
     modalServices.forEach(function(button) {
         button.addEventListener('click', function() {
-            modalAnimation(modal);
+            modalAnimation(modalServicesWindow);
         });
     });
 };
 
 
 const modalSupport = document.querySelectorAll('[modal="support"]');
+const modalSupportWindow = document.querySelector('.modal-support');
 
-if(modalSupport.length) {
-
-    const modal = document.querySelector('.modal-support');
+if(modalSupport.length &&  modalSupportWindow) {
     const modalBg = document.querySelector('.modal-bg');
-    modal.addEventListener('click', function(event) {
-        if (event.target === modalBg || event.target === modal) {
-            modalCloseAnimation(modal);
+    modalSupportWindow.addEventListener('click', function(event) {
+        if (event.target === modalBg || event.target === modalSupportWindow) {
+            modalCloseAnimation(modalSupportWindow);
         }
     });
     modalSupport.forEach(function(button) {
         button.addEventListener('click', function() {
-            modalAnimation(modal);
+            modalAnimation(modalSupportWindow);
         });
     });
 };
@@ -104,11 +116,12 @@ if (document.querySelector(".swiper-default")) {
 if (document.querySelector(".team-slider")) {
     const swiper21 = new Swiper(".team-slider", {
         slidesPerView: "auto",
+        watchOverflow: true,
         centeredSlides: false,
         spaceBetween: 18,
         freeMode: true,
         direction: "horizontal",
-        loop: true,
+        loop: false,
         grabCursor: true,
     });
 }

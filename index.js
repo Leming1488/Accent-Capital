@@ -217,15 +217,7 @@ window.addEventListener('load', function () {
     document.querySelectorAll('.service-submit-button').forEach(function(button) {
         button.addEventListener('click', function() {
             var modal = document.querySelector('.modal-services');
-            // Использование Motion JS для анимации открытия
-            animate(modal, {
-                opacity: [0, 1],
-                transform: ['translateY(100%)', 'translateY(0)']
-            }, {
-                duration: 0.4, // продолжительность анимации в секундах
-                easing: 'ease-out' // тип смягчения анимации
-            });
-            modal.style.display = 'flex'; // Установка display до начала анимации
+            modalAnimation(modal);
         });
     });
 

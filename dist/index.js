@@ -6023,16 +6023,7 @@
         document.querySelectorAll(".service-submit-button").forEach(function(button) {
           button.addEventListener("click", function() {
             var modal = document.querySelector(".modal-services");
-            animate2(modal, {
-              opacity: [0, 1],
-              transform: ["translateY(100%)", "translateY(0)"]
-            }, {
-              duration: 0.4,
-              // продолжительность анимации в секундах
-              easing: "ease-out"
-              // тип смягчения анимации
-            });
-            modal.style.display = "flex";
+            modalAnimation(modal);
           });
         });
         function setupAnimations(wrapperSelector, itemSelector) {

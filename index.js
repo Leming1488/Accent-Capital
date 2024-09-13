@@ -123,6 +123,16 @@ if (document.querySelector(".team-slider")) {
         direction: "horizontal",
         loop: false,
         grabCursor: true,
+        breakpoints: {
+        320: {
+            slidesPerView: 1.2,  // Количество видимых слайдов на маленьких экранах
+            spaceBetween: 10,  // Отступ между слайдами
+        },
+        768: {
+            slidesPerView: 'auto',  // Настройка для планшетов и больших экранов
+            spaceBetween: 20,
+        }
+        }
     });
 }
 
@@ -216,7 +226,10 @@ window.addEventListener('load', function () {
 
     document.querySelectorAll('.service-submit-button').forEach(function(button) {
         button.addEventListener('click', function() {
+            const serviceId = button.getAttribute('serviceid');
             var modal = document.querySelector('.modal-services');
+            const serviceInput = document.querySelector('.modal-services').querySelector('input[name="service-id"]');
+            serviceInput.value = serviceId;
             modalAnimation(modal);
         });
     });

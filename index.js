@@ -106,6 +106,14 @@ if (document.querySelector(".swiper-default")) {
         loop: true,
         grabCursor: true,
         breakpoints: {
+            320: {
+                slidesPerView: 1.2,  // Количество видимых слайдов на маленьких экранах
+                spaceBetween: 10,  // Отступ между слайдами
+            },
+            480: {
+                slidesPerView: 'auto',  // Настройка для планшетов и больших экранов
+                spaceBetween: 18,
+            },
             1440: {
                 slidesPerView: 3,
             },
@@ -124,13 +132,13 @@ if (document.querySelector(".team-slider")) {
         loop: false,
         grabCursor: true,
         breakpoints: {
-        320: {
-            slidesPerView: 1.2,  // Количество видимых слайдов на маленьких экранах
-            spaceBetween: 10,  // Отступ между слайдами
-        },
-        768: {
-            slidesPerView: 'auto',  // Настройка для планшетов и больших экранов
-            spaceBetween: 20,
+            320: {
+                slidesPerView: 1.2,  // Количество видимых слайдов на маленьких экранах
+                spaceBetween: 10,  // Отступ между слайдами
+            },
+            480: {
+                slidesPerView: 'auto',  // Настройка для планшетов и больших экранов
+                spaceBetween: 18,
         }
         }
     });
